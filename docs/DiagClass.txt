@@ -1,0 +1,64 @@
+
+package graou <<node>> {
+  
+  class Modele{
+  }
+  
+  package graou.graph {
+  
+    class Edge{
+      -int from
+      -int to
+      -int cost
+      +Edge(int x, int y, int cost)
+    }
+  
+    class Graph{
+      -final int V
+      -int E
+      +Graph(int N)
+      +int vertices()
+      +void addEdge(Edge e)
+      +Iterable<Edge> adj(int v)
+      +Iterable<Edge> edges()
+      +void writeFile(String s)
+    }
+  
+  }
+  
+  
+  class SeamCarving{
+    +static int[][] readpgm(String fn
+  }
+  
+  class Test{
+    -static boolean visit[]
+    +static void testHeap()
+    +static void testGraph()
+  }
+  
+  package graou.algo{
+  
+    abstract class Algo
+    
+    class Dijkstra
+    class Heap
+    
+    Algo <|-- Dijkstra
+  
+  }
+  
+  class Graou
+  
+}
+
+class JFrame
+JFrame <|-- Graou
+
+Graph -- "*" Edge
+Dijkstra --"*" Heap
+
+Modele --"1" SeamCarving
+SeamCarving -- "*" Algo
+SeamCarving -- "1" Graph
+
