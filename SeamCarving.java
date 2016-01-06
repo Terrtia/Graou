@@ -4,10 +4,19 @@ import java.util.ArrayList;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Classe permettant de lire et créer des fichiers pgm
+ *
+ */
+
 public class SeamCarving {
 
 	
-	
+	/**
+	 * Lit un fichier pgm
+	 * @param fn - nom du fichier à lire
+	 * @return un tableau à 2 dimensions contenant la valeur en niveaux de gris de chaque pixel de l'image (0 - 255)
+	 */
    public static int[][] readpgm(String fn)
 	 {		
         try {
@@ -39,6 +48,17 @@ public class SeamCarving {
             return null;
         }
     }
+   
+   /**
+    * Crée une image pgm
+    * @param image - tableau à 2 dimensions représentant l'image
+    * @param filename - nom du fichier à créer
+    */
+   public void writepgm(int[][] image, String filename) {
+	   
+   }
+   
+   
 
    
 }

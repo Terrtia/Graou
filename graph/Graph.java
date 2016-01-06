@@ -3,27 +3,45 @@ package graou.graph;
 import java.util.ArrayList;
 import java.io.*;
 
+/**
+ * Classe de création des graphes
+ *
+ */
+
 public class Graph
 {
    private ArrayList<Edge>[] adj;
    private final int V;
    int E;
 @SuppressWarnings("unchecked")
+/**
+ * Constructeur - Initialise V au nombre de sommets N
+ * 				- Crée un tableau de listes d'arêtes (une pour chaque sommet) : adj
+ * 				- Initialise E à 0
+ * @param N - nombre de sommets (numérotés)
+ */
    public Graph(int N)
 	 {
 		this.V = N;
 		this.E = 0;
-		 adj = (ArrayList<Edge>[]) new ArrayList[N];
-		for (int v= 0; v < N; v++)
+		adj = (ArrayList<Edge>[]) new ArrayList[N];
+		for (int v = 0; v < N; v++)
 		  adj[v] = new ArrayList<Edge>();
 		
 	 }
 
+/**
+* @return le nombre de sommets V
+*/
    public int vertices()
 	 {
 		return V;
 	 }
    
+   /**
+    * Ajoute l'arête e dans le graphe
+    * @param e - nouvelle arête
+    */
    public void addEdge(Edge e)
 	 {
 		int v = e.getFrom();
@@ -32,11 +50,19 @@ public class Graph
 		adj[w].add(e);
 	 }
    
+   /**
+    * @param v - numéro du sommet
+    * @return la liste des arêtes du sommet numéro v
+    */
    public Iterable<Edge> adj(int v)
 	 {
 		return adj[v];
 	 }      
 
+   /**
+    * @param v - numéro du sommet
+    * @return la liste des arêtes sortantes du sommet numéro v
+    */
    public Iterable<Edge> next(int v)
 	 {
 		ArrayList<Edge> n = new ArrayList<Edge>();
@@ -46,6 +72,9 @@ public class Graph
 		return n;
 	 }      
    
+   /**
+    * @return la liste de toutes les arêtes sortantes de tous les sommets
+    */
    public Iterable<Edge> edges()
 	 {
 		ArrayList<Edge> list = new ArrayList<Edge>();
@@ -57,7 +86,10 @@ public class Graph
         return list;
     }
    
-   
+   /**
+    * Transforme le graphe en fichier .dot
+    * @param s - nom du fichier résultat
+    */
    public void writeFile(String s)
 	 {
 		try
