@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Driver;
 import java.util.Scanner;
 
 /**
@@ -62,7 +61,10 @@ public class SeamCarving {
             }
             s.close();
             f.close();
-		   
+            
+            //DEBUG
+ 		   	System.out.println("lecture du fichier " + filename + " reussite\n");
+ 		   
             return image;
         }
 		
@@ -70,7 +72,7 @@ public class SeamCarving {
             t.printStackTrace(System.err) ;
             
             //DEBUG
-            System.err.println("lecture du fichier " + filename + " impossible");
+            System.err.println("lecture du fichier " + filename + " impossible\n");
             
             return null;
         }
@@ -110,24 +112,76 @@ public class SeamCarving {
 		   fos.close();
 		   
 		   //DEBUG
-		   System.out.println("ecriture du fichier " + filename + " reussite");
+		   System.out.println("ecriture du fichier " + filename + " reussite\n");
 		   
 	   } catch (IOException e) {
 		   e.printStackTrace(System.err);
 		   
 		   //DEBUG
-		   System.err.println("ecriture du fichier "+ filename + " impossible");
+		   System.err.println("ecriture du fichier "+ filename + " impossible\n");
 	   }
 	   
    }
    
+   /**
+    * Calcul le facteur d'intérêt de chaque pixel
+    * @param image - tableau à 2 dimensions représentant les pixels de l'image
+    * @return un tableau à 2 dimensions contenant les facteurs d'intérêt de chaque pixel
+    */
+   public int[][] verticalInterest (int[][] image) {
+	   int[][] interet = new int[height][width];
+	   
+	   int voisinGauche;
+	   int voisinDroite;
+	   int moyenne;
+	   int res;
+	   
+	   for(int i =0; i<height; i++){
+		   for(int j=0; j<width; j++){
+			   
+			   if(j == 0){
+				   voisinDroite = this.image[i][j + 1];
+				   res = this.image[i][j] - voisinDroite;
+			   } else if(j == width - 1){
+				   voisinGauche = this.image[i][j - 1];
+				   res = this.image[i][j] - voisinGauche;
+			   } else {
+				   voisinGauche = this.image[i][j - 1];
+				   voisinDroite = this.image[i][j + 1];
+				   moyenne = (voisinDroite + voisinGauche) /2;
+				   res = this.image[i][j] - moyenne;
+			   }
+			   
+			   if(res >= 0){
+				   interet[i][j] = res;
+			   }else{
+				   interet[i][j] = -res;
+			   }
+			   
+		   }
+	   }
+	   
+	   return interet;
+   }
    
+   
+   
+   /**
+    * Test
+    */
    public static void main(String[] args) {
 	   SeamCarving sc = new SeamCarving();
 	   
+	   /*test lecture/ecriture
 	   int[][] image = sc.readpgm("graou/t.pgm");
-
 	   sc.writepgm(image, "copy.pgm");
+	    */
+	   
+	   /*test facteur d'intérêt (ouvrir le fichier pour voir les facteurs) */ 
+	   int[][] image = sc.readpgm("graou/test.pgm");
+	   image = sc.verticalInterest(image);
+
+	   sc.writepgm(image, "Interetcopy.pgm");
 	}
 
    
