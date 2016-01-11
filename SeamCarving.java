@@ -28,7 +28,11 @@ public class SeamCarving {
 
 	}
 	
-	public Graph toGraph(int[][] itr) {
+	/**
+	 * @param itr - tableau contenant les facteurs d'intérêt de l'image
+	 * @return un graphe représentant ce tableau
+	 */
+	public Graph verticalToGraph(int[][] itr) {
 		int nbSommets = width * height + 2;
 		int i, j;
 		Graph g = new Graph(nbSommets);
@@ -216,7 +220,7 @@ public class SeamCarving {
 	   int[][] image = sc.readpgm("graou/test.pgm");
 	   image = sc.verticalInterest(image);
 	   
-	   Graph g = sc.toGraph(image);
+	   Graph g = sc.verticalToGraph(image);
 	   g.writeFile("test3.dot");
 
 	   sc.writepgm(image, "Interetcopy.pgm");
