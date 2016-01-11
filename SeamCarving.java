@@ -1,11 +1,7 @@
 package graou;
 
-<<<<<<< HEAD
-=======
 import graou.graph.Edge;
->>>>>>> fc94b044fb84b782e7ed6d9a5283576252eca851
 import graou.graph.Graph;
-
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
