@@ -1,5 +1,8 @@
 package graou;
 
+import graou.graph.Edge;
+import graou.graph.Graph;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,6 +26,38 @@ public class SeamCarving {
 	
 	public SeamCarving() {
 
+	}
+	
+	public Graph toGraph(int[][] itr) {
+		int nbSommets = width * height + 2;
+		int i, j;
+		Graph g = new Graph(nbSommets);
+		for (i = 0; i < height-1; i++)
+		{
+			  for (j = 0; j < width ; j++)
+			  {
+				  // arête vers la gauche
+				  if(j > 0) {
+					  g.addEdge(new Edge(width*i+j, width*(i+1)+j-1, itr[i][j]));
+				  }
+				  // arête vers la droite
+				  if(j < width-1) {
+					  g.addEdge(new Edge(width*i+j, width*(i+1)+j+1, itr[i][j]));
+				  }
+				  // arête centrale
+				  g.addEdge(new Edge(width*i+j, width*(i+1)+j, itr[i][j]));
+			  }
+		}
+		
+		// sommet tout en bas
+		for (j = 0; j < width ; j++)		  
+			  g.addEdge(new Edge(width*(height-1)+j, height*width, itr[i][j]));
+		
+		// sommet tout en haut
+		for (j = 0; j < width ; j++)					
+			  g.addEdge(new Edge(height*width+1, j, 0));
+		
+		return g;
 	}
 	
 	/**
@@ -180,6 +215,9 @@ public class SeamCarving {
 	   /*test facteur d'intérêt (ouvrir le fichier pour voir les facteurs) */ 
 	   int[][] image = sc.readpgm("graou/test.pgm");
 	   image = sc.verticalInterest(image);
+	   
+	   Graph g = sc.toGraph(image);
+	   g.writeFile("test3.dot");
 
 	   sc.writepgm(image, "Interetcopy.pgm");
 	}
