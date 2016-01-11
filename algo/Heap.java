@@ -6,6 +6,8 @@ package graou.algo;
  */
 
 public class Heap {
+	
+	private Node[] tas;
 
 	/**
 	 * Constructeur - crée une file de priorité contenant les entiers de 0 à N-1 avec priorité +infini
@@ -13,6 +15,10 @@ public class Heap {
 	 */
 	public Heap(int N) {
 		
+		this.tas = new Node[N];
+		for(int i=0; i<N; i++){
+			tas[i] = new Node(i, +1, i-1);
+		}
 	}
 
 	/**

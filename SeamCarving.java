@@ -1,5 +1,7 @@
 package graou;
 
+import graou.graph.Graph;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class SeamCarving {
 	
 	private String filename;
 	private String magic;
+	private int maxVal;
 	private int width;
 	private int height;
 	private int[][] image;
@@ -50,7 +53,7 @@ public class SeamCarving {
             s.close();
             line = d.readLine();
             s = new Scanner(line);
-            int maxVal = s.nextInt();
+            this.maxVal = s.nextInt();
             s.close();
             this.image = new int[height][width];
             s = new Scanner(d);
@@ -97,7 +100,7 @@ public class SeamCarving {
 		   s = width + " " + height + "\n";
 		   fos.write(s.getBytes());
 		   
-		   s = "255\n";
+		   s = String.valueOf(this.maxVal) + "\n";
 		   fos.write(s.getBytes());
 		   
 		   for(int i =0; i<height; i++){
@@ -152,6 +155,7 @@ public class SeamCarving {
 				   res = this.image[i][j] - moyenne;
 			   }
 			   
+			   //valeur absolue
 			   if(res >= 0){
 				   interet[i][j] = res;
 			   }else{
@@ -165,6 +169,10 @@ public class SeamCarving {
    }
    
    
+   public void Dijkstra(Graph g, int s, int t) {
+	   
+   }
+   
    
    /**
     * Test
@@ -172,14 +180,14 @@ public class SeamCarving {
    public static void main(String[] args) {
 	   SeamCarving sc = new SeamCarving();
 	   
-	   /*test lecture/ecriture
+	   /*test lecture/ecriture*/
 	   int[][] image = sc.readpgm("graou/t.pgm");
 	   sc.writepgm(image, "copy.pgm");
-	    */
+	    
 	   
 	   /*test facteur d'intérêt (ouvrir le fichier pour voir les facteurs) */ 
-	   int[][] image = sc.readpgm("graou/test.pgm");
-	   image = sc.verticalInterest(image);
+	  /*int[][] image = sc.readpgm("graou/test.pgm");
+	   image = sc.verticalInterest(image);*/
 
 	   sc.writepgm(image, "Interetcopy.pgm");
 	}
