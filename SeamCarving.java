@@ -1,6 +1,7 @@
 package graou;
 
 import graou.graph.Edge;
+import graou.algo.*;
 import graou.graph.Graph;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -217,17 +218,20 @@ public class SeamCarving {
 	   SeamCarving sc = new SeamCarving();
 	   
 	   /*test lecture/ecriture*/
-	   int[][] image = sc.readpgm("graou/t.pgm");
+	   //int[][] image = sc.readpgm("graou/t.pgm");
 	   //sc.writepgm(image, "copy.pgm");
 	    
 	   
 	   /*test facteur d'intérêt (ouvrir le fichier pour voir les facteurs) */ 
-	  /*int[][] image = sc.readpgm("graou/test.pgm");
-	   image = sc.verticalInterest(image);*/
+	   int[][] image = sc.readpgm("graou/test.pgm");
+	   image = sc.verticalInterest(image);
 	   
 	   Graph g = sc.verticalToGraph(image);
 	   g.writeFile("test3.dot");
-
+	   Dijkstra d = new Dijkstra();
+	   Graph res = d.rechercheChemin(g, 13, 12);
+	   g.writeFile("res.dot");
+	   
 	   sc.writepgm(image, "Interetcopy.pgm");
 	}
 

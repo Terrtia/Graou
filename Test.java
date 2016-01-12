@@ -25,6 +25,7 @@ public class Test {
 		h.decreaseKey(4,5);
 		h.decreaseKey(3,8);
 		h.decreaseKey(2,3);
+		
 		// A ce moment, la priorité des différents éléments est:
 		// 2 -> 3
 		// 3 -> 8
@@ -65,6 +66,6 @@ public class Test {
    public static void main(String[] args)
 	 {
 		testHeap();
-		testGraph();
+		//testGraph();
 	 }
 }

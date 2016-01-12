@@ -1,5 +1,10 @@
 package graou.algo;
 
+/**
+ * Classe de gestion de file de priorité
+ *
+ */
+
 public class Heap
 {
    public int cor[];
@@ -7,6 +12,10 @@ public class Heap
    public int heap[];
    public int size;
    
+   /**
+    * Crée une file de priorité contenant les entiers de 0 à n-1 avec chacun une priorité de +infini
+    * @param N - nombre d'entiers
+    */
     public Heap(int N)
 	 {
 		cor = new int[N+1];
@@ -19,21 +28,36 @@ public class Heap
 		for (i = 1; i < N+1; i++) heap[i] = Integer.MAX_VALUE;
 	 }
 
+    /**
+     * @param x - numéro de l'élément
+     * @return la priorité de l'élément numéro x
+     */
    public int priority(int x)
 	 {
 		return heap[cor[x]];
 	 }
    
+   /**
+    * @return true si la file est vide, false sinon
+    */
    public boolean isEmpty()
 	 {
 		return size == 0 ;
 	 }
    
+   /**
+    * @return la taille de la pile
+    */
    public int getsize()
 	 {
 		return size;
 	 }
    
+   /**
+    * Change la valeur de la priorité de l'élément x à la priorité p
+    * @param x - élément
+    * @param p - nouvelle priorité (< ancienne priorité)
+    */
    public void decreaseKey(int x, int p)
 	 {
 		int pos = cor[x];
@@ -56,6 +80,9 @@ public class Heap
 		cor[x] = pos;
 	 }
 
+   /**
+    * Affiche la file de priorité
+    */
    public void affiche()
 	 {
 		for (int i = 1; i <= size; i++)
@@ -63,6 +90,10 @@ public class Heap
 		System.out.println();
 	 }
    
+   /**
+    * Supprime de la file l'élément dont la priorité est la plus faible et le renvoit
+    * @return élément supprimé de la file
+    */
    public int pop()
 	 {
 		int ret = item[1];
