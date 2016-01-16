@@ -227,7 +227,7 @@ public class SeamCarving {
 	   g.writeFile("test3.dot");
 	   Dijkstra d = new Dijkstra();
 	   Graph res = d.rechercheChemin(g, 0, 13);
-	   g.writeFile("res.dot");
+	   res.writeFile("res.dot");
 	   
 	   sc.writepgm(image, "Interetcopy.pgm");
 	}
