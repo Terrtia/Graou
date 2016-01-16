@@ -45,7 +45,7 @@ public class Dijkstra {
 		// construction graphe chemin de coût minimal en partant de la fin
 		Graph res = new Graph(g.vertices());
 		int sommet = t;
-		for(i = 0;i < 4;i++) {
+		while(sommet != s) {
 			res.addEdge(new Edge(parent[sommet], sommet, h.priority(sommet)-h.priority(parent[sommet])));
 			sommet = parent[sommet];
 		}
