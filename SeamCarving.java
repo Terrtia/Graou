@@ -37,30 +37,32 @@ public class SeamCarving {
 		int nbSommets = width * height + 2;
 		int i, j;
 		Graph g = new Graph(nbSommets);
+		
+		// sommet tout en haut
+		for (j = 0; j < width ; j++)					
+			  g.addEdge(new Edge(0, j+1, 0));
+		
 		for (i = 0; i < height-1; i++)
 		{
 			  for (j = 0; j < width ; j++)
 			  {
 				  // arête vers la gauche
 				  if(j > 0) {
-					  g.addEdge(new Edge(width*i+j, width*(i+1)+j-1, itr[i][j]));
+					  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j-1+1, itr[i][j]));
 				  }
 				  // arête vers la droite
 				  if(j < width-1) {
-					  g.addEdge(new Edge(width*i+j, width*(i+1)+j+1, itr[i][j]));
+					  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1+1, itr[i][j]));
 				  }
 				  // arête centrale
-				  g.addEdge(new Edge(width*i+j, width*(i+1)+j, itr[i][j]));
+				  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, itr[i][j]));
 			  }
 		}
 		
 		// sommet tout en bas
 		for (j = 0; j < width ; j++)		  
-			  g.addEdge(new Edge(width*(height-1)+j, height*width, itr[i][j]));
+			  g.addEdge(new Edge(width*(height-1)+j+1, height*width+1, itr[i][j]));
 		
-		// sommet tout en haut
-		for (j = 0; j < width ; j++)					
-			  g.addEdge(new Edge(height*width+1, j, 0));
 		
 		return g;
 	}
@@ -206,11 +208,6 @@ public class SeamCarving {
    }
    
    
-   public void Dijkstra(Graph g, int s, int t) {
-	   
-   }
-   
-   
    /**
     * Test
     */
@@ -229,7 +226,7 @@ public class SeamCarving {
 	   Graph g = sc.verticalToGraph(image);
 	   g.writeFile("test3.dot");
 	   Dijkstra d = new Dijkstra();
-	   Graph res = d.rechercheChemin(g, 13, 12);
+	   Graph res = d.rechercheChemin(g, 0, 13);
 	   g.writeFile("res.dot");
 	   
 	   sc.writepgm(image, "Interetcopy.pgm");

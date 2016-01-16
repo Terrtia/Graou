@@ -19,10 +19,8 @@ public class Dijkstra {
 		int nbSommets = g.vertices();
 		Heap h = new Heap(nbSommets);
 		h.decreaseKey(s, 0);
-		Edge edgeMin = new Edge(0, 1, 9999);
 		int i = 0;
 		int cout = 0;
-		int sommetD = 0;
 		h.affiche();
 		
 		for(i = 0;i < nbSommets;i++) {
