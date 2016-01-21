@@ -68,6 +68,44 @@ public class SeamCarving {
 	}
 	
 	/**
+	 * @param itr - tableau contenant les facteurs d'intérêt de l'image
+	 * @return un graphe représentant ce tableau
+	 */
+	public Graph horizontalToGraph(int[][] itr) {
+		int nbSommets = width * height + 2;
+		int i, j;
+		Graph g = new Graph(nbSommets);
+		
+		// sommet tout en haut
+		for (j = 0; j < height ; j++)					
+			  g.addEdge(new Edge(0, j+1, 0));
+		
+		for (i = 0; i < width-1; i++)
+		{
+			  for (j = 0; j < height ; j++)
+			  {
+				  // arête vers le haut
+				  if(j > 0) {
+					  g.addEdge(new Edge(height*i+j+1, height*(i+1)+j-1+1, itr[j][i]));
+				  }
+				  // arête vers le bas
+				  if(j < height-1) {
+					  g.addEdge(new Edge(height*i+j+1, height*(i+1)+j+1+1, itr[j][i]));
+				  }
+				  // arête centrale
+				  g.addEdge(new Edge(height*i+j+1, height*(i+1)+j+1, itr[j][i]));
+			  }
+		}
+		
+		// sommet tout en bas
+		for (j = 0; j < height ; j++)		  
+			  g.addEdge(new Edge(height*(width-1)+j+1, height*width+1, itr[j][i]));
+		
+		
+		return g;
+	}
+	
+	/**
 	 * Lit un fichier pgm
 	 * @param fn - nom du fichier à lire
 	 * @return un tableau à 2 dimensions contenant la valeur en niveaux de gris de chaque pixel de l'image (0 - 255)
@@ -224,7 +262,9 @@ public class SeamCarving {
 	   image = sc.verticalInterest(image);
 	   
 	   Graph g = sc.verticalToGraph(image);
-	   g.writeFile("test3.dot");
+	   g.writeFile("testV.dot");
+	   g = sc.horizontalToGraph(image);
+	   g.writeFile("testH.dot");
 	   Dijkstra d = new Dijkstra();
 	   Graph res = d.rechercheChemin(g, 0, 13);
 	   res.writeFile("res.dot");
