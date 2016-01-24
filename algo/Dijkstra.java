@@ -1,5 +1,7 @@
 package graou.algo;
 
+import java.util.ArrayList;
+
 import graou.graph.Edge;
 import graou.graph.Graph;
 
@@ -15,7 +17,7 @@ public class Dijkstra {
 	 * @param t - sommet d'arrivée
 	 * @return le plus court chemin entre s et t
 	 */
-	public Graph rechercheChemin(Graph g, int s, int t) {
+	public ArrayList<Integer> rechercheChemin(Graph g, int s, int t) {
 		// initialisation du tas
 		int nbSommets = g.vertices();
 		Heap h = new Heap(nbSommets);
@@ -43,14 +45,24 @@ public class Dijkstra {
 		}
 		
 		// construction graphe chemin de coût minimal en partant de la fin
-		Graph res = new Graph(g.vertices());
+		/*Graph res = new Graph(g.vertices());
 		int sommet = t;
 		while(sommet != s) {
 			res.addEdge(new Edge(parent[sommet], sommet, h.priority(sommet)-h.priority(parent[sommet])));
 			sommet = parent[sommet];
+		}*/
+		
+		// remplissage de l'arraylist avec les sommets du chemin de coût minimal
+		ArrayList<Integer> liste = new ArrayList<Integer>();
+		int sommet = parent[t];
+		while(sommet != s) {
+			liste.add(sommet);
+			sommet = parent[sommet];
 		}
-			
-		return res;
+	
+		//return res;
+		return liste;
+
 	}
 	
 }

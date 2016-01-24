@@ -1,6 +1,7 @@
 package graou;
 
 import graou.graph.Edge;
+import java.lang.Math;
 import graou.algo.*;
 import graou.graph.Graph;
 import java.io.BufferedReader;
@@ -8,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -245,6 +248,40 @@ public class SeamCarving {
 	   return interet;
    }
    
+   public int[][] deleteColumns(int[][] image, int nbCol) {
+	   int i,j;
+	   int height = image.length;
+	   int width = image[0].length;
+	   // copie de l'image
+	   int[][] modif = new int[height][width];
+	   for(i = 0;i < height;i++) {
+		   for(j = 0;j < width;j++) {
+			   modif[i][j] = image[i][j];
+		   }
+	   }
+	   
+	   int[][] interets = new int[height][width];
+	   Dijkstra d = new Dijkstra();
+	   Graph g;
+	   int ligne, col;
+	   // on fait nbCol fois une suppression de colonne
+	   for(i = 0;i < nbCol;i++) {
+		   // calcul des intérêts
+		   interets = verticalInterest(image);
+		   g = verticalToGraph(interets);
+		   // recherche de la colonne à supprimer
+		   ArrayList<Integer> liste = d.rechercheChemin(g, 0, width*height+1);
+		   for(int l : liste) {
+			   ligne = (int) Math.floor(l / width);
+			   col = l - (width*ligne) - 1;
+			   // suppression de la case, décalage du reste de la ligne
+			   
+		   }
+	   }
+	   
+	   return modif;
+   }
+   
    
    /**
     * Test
@@ -263,13 +300,14 @@ public class SeamCarving {
 	   
 	   Graph g = sc.verticalToGraph(image);
 	   g.writeFile("testV.dot");
-	   g = sc.horizontalToGraph(image);
-	   g.writeFile("testH.dot");
+	   //g = sc.horizontalToGraph(image);
+	   //g.writeFile("testH.dot");
 	   Dijkstra d = new Dijkstra();
-	   Graph res = d.rechercheChemin(g, 0, 13);
-	   res.writeFile("res.dot");
+	   ArrayList<Integer> res = d.rechercheChemin(g, 0, 13);
+	   //res.writeFile("res.dot");
+	   System.out.println(res.toString());
 	   
-	   sc.writepgm(image, "Interetcopy.pgm");
+	   //sc.writepgm(image, "Interetcopy.pgm");
 	}
 
    
