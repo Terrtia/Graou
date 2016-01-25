@@ -247,6 +247,95 @@ public class SeamCarving {
    
    
    /**
+    * Calcul le facteur d'intérêt de chaque pixel
+    * @param image - tableau à 2 dimensions représentant les pixels de l'image
+    * @return un tableau à 2 dimensions contenant les facteurs d'intérêt de chaque pixel
+    */
+   public int[][] HorizontalInterest (int[][] image) {
+	   int[][] interet = new int[height][width];
+	   
+	   int voisinHaut;
+	   int voisinBas;
+	   int moyenne;
+	   int res;
+	   
+	   for(int i =0; i<height; i++){
+		   for(int j=0; j<width; j++){
+			   
+			   if(i == 0 && i != height - 1){
+				   voisinBas = this.image[i + 1][j];
+				   res = this.image[i][j] - voisinBas;
+			   } else if(i == height - 1){
+				   voisinHaut = this.image[i - 1][j];
+				   res = this.image[i][j] - voisinHaut;
+			   } else {
+				   voisinHaut = this.image[i - 1][j];
+				   voisinBas = this.image[i + 1][j];
+				   moyenne = (voisinBas + voisinHaut) /2;
+				   res = this.image[i][j] - moyenne;
+			   }
+			   
+			   //valeur absolue
+			   if(res >= 0){
+				   interet[i][j] = res;
+			   }else{
+				   interet[i][j] = -res;
+			   }
+			   
+		   }
+	   }
+	   
+	   return interet;
+   }
+   
+   public void deleteColumns() {
+	   
+	   
+	   this.readpgm("graou/test.pgm");//provisoir
+	   image = this.verticalInterest(image);
+	   
+	   Dijkstra d = new Dijkstra();
+	   ArrayList<Integer> res = d.rechercheChemin(g, 0, 13);
+	   
+	   int[][] newImage = new int[height][width - 1];
+	   
+	   int nbPixels = height * width;
+	   int line = 0;
+	   int column = 0;
+	   boolean equals;
+	   
+	   for(int l : res){
+		   column = 0;
+		   equals = false;
+		   if(l != 0 && l != (nbPixels + 1) ){
+			   while(!equals){
+				   if(l == column){
+					   equals = true;
+				   }
+				   
+				   if(equals == false){
+					   newImage[line][column] = this.image[line][column];
+				   } else if(equals == true){
+					   newImage[line][column]= this.image[line][column + 1];
+				   } else {
+					   System.err.println("Error 0x087A4E652");
+				   } 
+				   column++;
+			   }
+			 
+			   line++;
+		   }
+		   
+	   }
+	   
+	   
+	   
+	   
+	   this.writepgm(image, "colnneSuppr.pgm");//provisoir
+   }
+   
+   
+   /**
     * Test
     */
    public static void main(String[] args) {
@@ -259,11 +348,11 @@ public class SeamCarving {
 	   
 	   /*test facteur d'intérêt (ouvrir le fichier pour voir les facteurs) */ 
 	   int[][] image = sc.readpgm("graou/test.pgm");
-	   image = sc.verticalInterest(image);
+	   image = sc.HorizontalInterest(image);
 	   
-	   Graph g = sc.verticalToGraph(image);
-	   g.writeFile("testV.dot");
-	   g = sc.horizontalToGraph(image);
+	   /*Graph g = sc.verticalToGraph(image);
+	   g.writeFile("testV.dot");*/
+	   Graph g = sc.horizontalToGraph(image);
 	   g.writeFile("testH.dot");
 	   Dijkstra d = new Dijkstra();
 	   Graph res = d.rechercheChemin(g, 0, 13);
