@@ -51,14 +51,14 @@ public class SeamCarving {
 			  {
 				  // arête vers la gauche
 				  if(j > 0) {
-					  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j-1+1, itr[i][j]));
+					  g.addEdge(new Edge(width*i +j+1, width*(i+1)+(j-1)+1, itr[i][j]));
 				  }
 				  // arête vers la droite
 				  if(j < width-1) {
-					  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1+1, itr[i][j]));
+					  g.addEdge(new Edge(width*i +j+1, width*(i+1)+(j+1)+1, itr[i][j]));
 				  }
 				  // arête centrale
-				  g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, itr[i][j]));
+				  g.addEdge(new Edge(width*i +j+1, width*(i+1)+j+1, itr[i][j]));
 			  }
 		}
 		
@@ -248,40 +248,6 @@ public class SeamCarving {
 	   return interet;
    }
    
-   /*public int[][] deleteColumns(int[][] image, int nbCol) {
-	   int i,j;
-	   int height = image.length;
-	   int width = image[0].length;
-	   // copie de l'image
-	   int[][] modif = new int[height][width];
-	   for(i = 0;i < height;i++) {
-		   for(j = 0;j < width;j++) {
-			   modif[i][j] = image[i][j];
-		   }
-	   }
-	   
-	   int[][] interets = new int[height][width];
-	   Dijkstra d = new Dijkstra();
-	   Graph g;
-	   int ligne, col;
-	   // on fait nbCol fois une suppression de colonne
-	   for(i = 0;i < nbCol;i++) {
-		   // calcul des intérêts
-		   interets = verticalInterest(image);
-		   g = verticalToGraph(interets);
-		   // recherche de la colonne à supprimer
-		   ArrayList<Integer> liste = d.rechercheChemin(g, 0, width*height+1);
-		   for(int l : liste) {
-			   ligne = (int) Math.floor(l / width);
-			   col = l - (width*ligne) - 1;
-			   // suppression de la case, décalage du reste de la ligne
-			   
-		   }
-	   }
-	   
-	   return modif;
-   }*/
-   
    
    /**
     * Calcul le facteur d'intérêt de chaque pixel
@@ -328,14 +294,12 @@ public class SeamCarving {
    public void deleteColumns() {
 	   
 	   
-	   //this.readpgm("graou/test.pgm");//provisoir
 	   this.interest = this.verticalInterest(image);
 	   int nbPixels = height * width;
 	   
 	   Dijkstra d = new Dijkstra();
 	   Graph g = this.verticalToGraph(this.interest);
-	   g.writeFile("deleteV");
-	   System.out.println(g.vertices());
+	  
 	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
 	   int[][] newImage = new int[height][width - 1];
@@ -351,7 +315,7 @@ public class SeamCarving {
 		   equals = false;
 		   
 		   if(l != 0 && l != (nbPixels + 1) ){
-			   while(!equals){
+			   while(column != this.width -1){
 				   if(pos == column){
 					   equals = true;
 				   }
@@ -361,7 +325,6 @@ public class SeamCarving {
 				   } else if(equals == true){
 					   if(column < width){
 						   newImage[line][column] = this.image[line][column + 1];
-						   System.out.println("pouet" +this.image[line][column + 1]);
 					   }
 				   } else {
 					   System.err.println("Error 0x087A4E652");
@@ -370,13 +333,6 @@ public class SeamCarving {
 			   }
 		   }
 		   line--;
-	   }
-	   
-	   for(int i =0; i<height; i++){
-		   for(int j=0; j<width-1; j++){
-			   System.out.println(newImage[i][j] + "|");
-		   }
-		   System.out.println("\n");
 	   }
 	   
 	   this.image = newImage;
@@ -417,14 +373,14 @@ public class SeamCarving {
 	   //System.out.println(res.toString());
 	   
 	   /* Suppression 1 colonnes */
-	   sc.readpgm("graou/test.pgm");
+	   /*sc.readpgm("graou/test.pgm");
 	   sc.deleteNColumns(2);
-	   sc.writepgm(sc.image, "verDelete.pgm");
+	   sc.writepgm(sc.image, "suppr.pgm");*/
 	   
 	   /* Suppression 50 colonnes */
-	   /*sc.readpgm("graou/t.pgm");
+	   sc.readpgm("graou/t.pgm");
 	   sc.deleteNColumns(50);
-	   sc.writepgm(sc.image, "verDeletet.pgm");*/
+	   sc.writepgm(sc.image, "verDeletet.pgm");
 	   
 	}
 
