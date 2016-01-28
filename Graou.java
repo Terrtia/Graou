@@ -1,13 +1,12 @@
 package graou;
 
+import graou.vues.*;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import vues.VueActions;
-import vues.VueHaut;
-import vues.VueImages;
 
 @SuppressWarnings("serial")
 public class Graou extends JFrame {
