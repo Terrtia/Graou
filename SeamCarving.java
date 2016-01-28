@@ -119,16 +119,17 @@ public class SeamCarving {
         	/* Image dans le meme package:
         	InputStream f = Driver.class.getResourceAsStream("t.pgm");*/
         	
-        	/* Image a la racine du projet
-        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);*/
+        	/* Image a la racine du projet*/
+        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
         	
         	/* Image à partir de la racine du systeme */
-        	ClassLoader cl = this.getClass().getClassLoader();
+        	
+        	//ClassLoader cl = this.getClass().getClassLoader();
         			//cl.getResource("com/acme/config/settings.xml");
         			//cl.getSystemClassLoader().getResource(“com/acme/config/settings.xml”) ;
         			//cl.getSystemResource(“com/acme/config/settings.xml”);
         	
-        	InputStream f = ClassLoader.getSystemClassLoader().getSystemResourceAsStream("/home/aurelien/workspace/Graou/copy.pgm");
+        	//InputStream f = ClassLoader.getSystemClassLoader().getSystemResourceAsStream("/home/aurelien/workspace/Graou/copy.pgm");
       
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
             
@@ -301,14 +302,14 @@ public class SeamCarving {
 	   return interet;
    }
    
-   public void deleteColumns() {
-	   
+   public void deleteColumns() {   
 	   
 	   this.interest = this.verticalInterest(image);
 	   int nbPixels = height * width;
 	   
 	   Dijkstra d = new Dijkstra();
 	   Graph g = this.verticalToGraph(this.interest);
+	   g.writeFile("vert");
 	  
 	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
@@ -349,9 +350,64 @@ public class SeamCarving {
 	   this.width = width - 1;   	   
    }
    
+   
+   public void deleteLines() {   
+	   
+	   this.interest = this.HorizontalInterest(image);
+	   int nbPixels = height * width;
+	   
+	   Dijkstra d = new Dijkstra();
+	   Graph g = this.horizontalToGraph(this.interest);
+	  
+	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   
+	   int[][] newImage = new int[height - 1][width];
+	   
+	   int line;
+	   int column = width - 1;
+	   boolean equals;
+	   int pos;
+	   
+	   for(int l : res){
+		   line = 0;
+		   pos = l%this.height - 1;
+		   equals = false;
+		   
+		   if(l != 0 && l != (nbPixels + 1) ){
+			   while(line != this.height -1){
+				   if(pos == line){
+					   equals = true;
+				   }
+				   
+				   if(equals == false){
+					   newImage[line][column] = this.image[line][column];
+				   } else if(equals == true){
+					   if(column < width){
+						   newImage[line][column] = this.image[line + 1][column];
+					   }
+				   } else {
+					   System.err.println("Error 0x087A4E652");
+				   } 
+				   line++;
+			   }
+		   }
+		   column--;
+	   }
+	   
+	   this.image = newImage;
+	   this.height = height - 1;   	   
+   }
+
+   
    public void deleteNColumns(int nb){
 	   for(int i=0; i<nb; i++){
 		   this.deleteColumns();
+	   }
+   }
+   
+   public void deleteNLines(int nb) {
+	   for(int i=0; i<nb; i++){
+		   this.deleteLines();
 	   }
    }
    
@@ -388,8 +444,18 @@ public class SeamCarving {
 	   sc.writepgm(sc.image, "suppr.pgm");*/
 	   
 	   /* Suppression 50 colonnes */
-	   sc.readpgm("graou/t.pgm");
+	   /*sc.readpgm("graou/t.pgm");
 	   sc.deleteNColumns(50);
+	   sc.writepgm(sc.image, "verDeletet.pgm");*/
+	   
+	   /* Suppression 1 ligne */
+	   /*sc.readpgm("graou/test.pgm");
+	   sc.deleteLines();
+	   sc.writepgm(sc.image, "honzDelet.pgm");*/
+	   
+	   /* Suppression 50 lignes */
+	   sc.readpgm("graou/t.pgm");
+	   sc.deleteNLines(50);
 	   sc.writepgm(sc.image, "verDeletet.pgm");
 	   
 	}
