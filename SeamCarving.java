@@ -6,9 +6,11 @@ import graou.graph.Graph;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,6 +32,18 @@ public class SeamCarving {
 	
 	public SeamCarving() {
 
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int[][] getImage() {
+		return image;
 	}
 	
 	/**
@@ -120,18 +134,12 @@ public class SeamCarving {
         	InputStream f = Driver.class.getResourceAsStream("t.pgm");*/
         	
         	/* Image a la racine du projet
-        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);*/
+        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+            BufferedReader d = new BufferedReader(new InputStreamReader(f));*/
         	
-        	/* Image à partir de la racine du systeme */
-        	ClassLoader cl = this.getClass().getClassLoader();
-        			//cl.getResource("com/acme/config/settings.xml");
-        			//cl.getSystemClassLoader().getResource(“com/acme/config/settings.xml”) ;
-        			//cl.getSystemResource(“com/acme/config/settings.xml”);
+        	FileReader f = new FileReader(filename);
+        	BufferedReader d = new BufferedReader(f);
         	
-        	InputStream f = ClassLoader.getSystemClassLoader().getSystemResourceAsStream("/home/aurelien/workspace/Graou/copy.pgm");
-      
-            BufferedReader d = new BufferedReader(new InputStreamReader(f));
-            
             this.magic = d.readLine() + "\n";
             String line = d.readLine();
             while (line.startsWith("#")) {
