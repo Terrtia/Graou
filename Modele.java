@@ -53,6 +53,7 @@ public class Modele extends Observable {
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
 			fileRes = repertoireCourant + "/res.pgm";
+			sc.readpgm(file);
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
@@ -68,6 +69,7 @@ public class Modele extends Observable {
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
 			fileRes = repertoireCourant + "/res.pgm";
+			sc.readpgm(file);
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
@@ -83,6 +85,7 @@ public class Modele extends Observable {
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
 			fileRes = repertoireCourant + "/res.pgm";
+			sc.readpgm(file);
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
@@ -98,6 +101,7 @@ public class Modele extends Observable {
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
 			fileRes = repertoireCourant + "/res.pgm";
+			sc.readpgm(file);
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
