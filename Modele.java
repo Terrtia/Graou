@@ -62,7 +62,48 @@ public class Modele extends Observable {
 	}
 	
 	public void deleteLines(int nb) {
-		
+		sc.deleteNLines(nb);
+		save("res.pgm");
+		String repertoireCourant;
+		try {
+			repertoireCourant = new File(".").getCanonicalFile().getPath();
+			fileRes = repertoireCourant + "/res.pgm";
+			setChanged();
+			notifyObservers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addColumns(int nb) {
+		sc.addNColumns(nb);
+		save("res.pgm");
+		String repertoireCourant;
+		try {
+			repertoireCourant = new File(".").getCanonicalFile().getPath();
+			fileRes = repertoireCourant + "/res.pgm";
+			setChanged();
+			notifyObservers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addLines(int nb) {
+		sc.addNLines(nb);
+		save("res.pgm");
+		String repertoireCourant;
+		try {
+			repertoireCourant = new File(".").getCanonicalFile().getPath();
+			fileRes = repertoireCourant + "/res.pgm";
+			setChanged();
+			notifyObservers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void save(String name) {

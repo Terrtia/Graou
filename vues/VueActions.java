@@ -24,6 +24,8 @@ public class VueActions extends JPanel implements Observer {
 	private Modele m;
 	private JButton delV;
 	private JButton delH;
+	private JButton addV;
+	private JButton addH;
 	
 	public VueActions(Modele mod) {
 		// TODO Auto-generated constructor stub
@@ -84,8 +86,10 @@ public class VueActions extends JPanel implements Observer {
 				ok.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						jd.dispose();
-						m.deleteLines((int)js.getValue());
+						if((int) js.getValue() <= m.getHeight()) {
+							jd.dispose();
+							m.deleteLines((int)js.getValue());
+						}
 					}
 				});
 				final JButton annuler = new JButton("Annuler");
@@ -105,9 +109,83 @@ public class VueActions extends JPanel implements Observer {
 			}
 		});
 		
+		addV = new JButton("Ajout de colonnes");
+		addV.setEnabled(false);
+		
+		addV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final JDialog jd = new JDialog(new JFrame(), "Nombre de colonnes à ajouter", true);
+				jd.setPreferredSize(new Dimension(300,100));
+				JPanel dialPan = new JPanel();
+				SpinnerModel sm = new SpinnerNumberModel(0, 0, m.getWidth(), 1);
+				final JSpinner js = new JSpinner(sm);
+				final JButton ok = new JButton("Valider");
+				ok.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+							jd.dispose();
+							m.addColumns((int)js.getValue());
+						
+					}
+				});
+				final JButton annuler = new JButton("Annuler");
+				annuler.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						jd.dispose();
+					}
+				});
+				dialPan.add(new JLabel("Nombre de colonnes à ajouter :"));
+				dialPan.add(js);
+				dialPan.add(ok);
+				dialPan.add(annuler);
+				jd.setContentPane(dialPan);
+				jd.pack();
+				jd.setVisible(true);				
+			}
+		});
+		
+		addH = new JButton("Ajout de lignes");
+		addH.setEnabled(false);
+		
+		addH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final JDialog jd = new JDialog(new JFrame(), "Nombre de lignes à ajouter", true);
+				jd.setPreferredSize(new Dimension(300,100));
+				JPanel dialPan = new JPanel();
+				SpinnerModel sm = new SpinnerNumberModel(0, 0, m.getHeight(), 1);
+				final JSpinner js = new JSpinner(sm);
+				final JButton ok = new JButton("Valider");
+				ok.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+							jd.dispose();
+							m.addLines((int)js.getValue());
+						
+					}
+				});
+				final JButton annuler = new JButton("Annuler");
+				annuler.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						jd.dispose();
+					}
+				});
+				dialPan.add(new JLabel("Nombre de lignes à ajouter :"));
+				dialPan.add(js);
+				dialPan.add(ok);
+				dialPan.add(annuler);
+				jd.setContentPane(dialPan);
+				jd.pack();
+				jd.setVisible(true);				
+			}
+		});
+		
 		
 		add(delV);
 		add(delH);
+		add(addV);
+		add(addH);
 	}
 
 	@Override
@@ -115,6 +193,8 @@ public class VueActions extends JPanel implements Observer {
 		// TODO Auto-generated method stub
 		delV.setEnabled(true);
 		delH.setEnabled(true);
+		addV.setEnabled(true);
+		addH.setEnabled(true);
 	}
 
 }
