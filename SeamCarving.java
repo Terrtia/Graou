@@ -116,10 +116,20 @@ public class SeamCarving {
    public int[][] readpgm(String filename)
 	 {		
         try {
-        	/*Image dans le meme package:
+        	/* Image dans le meme package:
         	InputStream f = Driver.class.getResourceAsStream("t.pgm");*/
         	
-        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+        	/* Image a la racine du projet
+        	InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);*/
+        	
+        	/* Image à partir de la racine du systeme */
+        	ClassLoader cl = this.getClass().getClassLoader();
+        			//cl.getResource("com/acme/config/settings.xml");
+        			//cl.getSystemClassLoader().getResource(“com/acme/config/settings.xml”) ;
+        			//cl.getSystemResource(“com/acme/config/settings.xml”);
+        	
+        	InputStream f = ClassLoader.getSystemClassLoader().getSystemResourceAsStream("/home/aurelien/workspace/Graou/copy.pgm");
+      
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
             
             this.magic = d.readLine() + "\n";
