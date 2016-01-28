@@ -309,7 +309,6 @@ public class SeamCarving {
 	   
 	   Dijkstra d = new Dijkstra();
 	   Graph g = this.verticalToGraph(this.interest);
-	   g.writeFile("vert");
 	  
 	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
@@ -411,6 +410,155 @@ public class SeamCarving {
 	   }
    }
    
+   
+   public void addColumns() {   
+	   
+	   this.interest = this.verticalInterest(image);
+	   int nbPixels = height * width;
+	   
+	   Dijkstra d = new Dijkstra();
+	   Graph g = this.verticalToGraph(this.interest);
+	  
+	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   
+	   int[][] newImage = new int[height][width + 1];
+	   
+	   int line = height - 1;
+	   int column;
+	   boolean equals;
+	   int pos;
+	   
+	   for(int l : res){
+		   column = 0;
+		   pos = l%this.width - 1;
+		   equals = false;
+		   
+		   if(l != 0 && l != (nbPixels + 1) ){
+			   while(column != this.width + 1){
+				   if(pos == column){
+					   equals = true;
+				   }
+				   
+				   if(equals == false){
+					   newImage[line][column] = this.image[line][column];
+				   } else if(equals == true){
+					   //Ajout premiere colonne de pixels
+					   if(column == pos){
+						   if(column > 0) {
+							   int leftPixel = this.image[line][column - 1];
+							   int currentPixel = this.image[line][column];
+							   newImage[line][column] = (leftPixel + currentPixel) / 2;
+						   } else {
+							   newImage[line][column] = this.image[line][column];
+						   }
+					   }
+					   //ajout deuxieme colonne de pixels
+					   else if(column == pos + 1){
+						   if(column < this.width ){
+							   int rightPixel = this.image[line][column];
+							   int currentPixel = this.image[line][column - 1];
+							   newImage[line][column] = (rightPixel + currentPixel) / 2;
+						   } else {
+							   newImage[line][column] = this.image[line][column];
+						   }
+					   }
+					   else if(column < width  + 1){
+						   newImage[line][column] = this.image[line][column - 1];
+					   }
+				   } else {
+					   System.err.println("Error 0x087A4E652");
+				   } 
+				   column++;
+			   }
+		   }
+		   line--;
+	   }
+	   
+	   this.image = newImage;
+	   this.width = width + 1;   	   
+   }
+
+
+public void addLines() {   
+	   
+	   this.interest = this.HorizontalInterest(image);
+	   int nbPixels = height * width;
+	   
+	   Dijkstra d = new Dijkstra();
+	   Graph g = this.horizontalToGraph(this.interest);
+	  
+	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   
+	   int[][] newImage = new int[height + 1][width];
+	   
+	   int line;
+	   int column = width - 1;
+	   boolean equals;
+	   int pos;
+	   
+	   for(int l : res){
+		   line = 0;
+		   pos = l%this.height - 1;
+		   equals = false;
+		   
+		   if(l != 0 && l != (nbPixels + 1) ){
+			   while(line != this.height +1){
+				   if(pos == line){
+					   equals = true;
+				   }
+				   
+				   if(equals == false){
+					   newImage[line][column] = this.image[line][column];
+				   } else if(equals == true){
+					 //Ajout premiere ligne de pixels
+					   if(line == pos){
+						   if(line > 0) {
+							   int highPixel = this.image[line - 1][column];
+							   int currentPixel = this.image[line][column];
+							   newImage[line][column] = (highPixel + currentPixel) / 2;
+						   } else {
+							   newImage[line][column] = this.image[line][column];
+						   }
+					   }
+					   //ajout deuxieme ligne de pixels
+					   else if(line == pos + 1){
+						   if(line < this.height ){
+							   int lowPixel = this.image[line][column];
+							   int currentPixel = this.image[line - 1][column];
+							   newImage[line][column] = (lowPixel + currentPixel) / 2;
+						   } else {
+							   newImage[line][column] = this.image[line][column];
+						   }
+					   }
+					   else if(line < width  + 1){
+						   newImage[line][column] = this.image[line - 1][column];
+					   }
+				   } else {
+					   System.err.println("Error 0x087A4E652");
+				   } 
+				   line++;
+			   }
+		   }
+		   column--;
+	   }
+	   
+	   this.image = newImage;
+	   this.height = height + 1;   	   
+   }
+   
+	   	
+   public void addNColumns(int nb) {
+	   for(int i=0; i<nb; i++){
+		   this.addColumns();
+	   }
+   }
+   
+   public void addNLines(int nb) {
+	   for(int i=0; i<nb; i++){
+		   this.addLines();
+	   }
+   }
+   
    /**
     * Test
     */
@@ -454,11 +602,32 @@ public class SeamCarving {
 	   sc.writepgm(sc.image, "honzDelet.pgm");*/
 	   
 	   /* Suppression 50 lignes */
-	   sc.readpgm("graou/t.pgm");
+	   /*sc.readpgm("graou/t.pgm");
 	   sc.deleteNLines(50);
-	   sc.writepgm(sc.image, "verDeletet.pgm");
+	   sc.writepgm(sc.image, "verDeletet.pgm");*/
 	   
+	   /* ajout 1 colonnes */
+	   /*sc.readpgm("graou/test.pgm");
+	   sc.addColumns();
+	   sc.writepgm(sc.image, "addver.pgm");*/
+	   
+	   /* ajouts 50 colonnes */
+	   /*sc.readpgm("graou/t.pgm");
+	   sc.addNColumns(50);
+	   sc.writepgm(sc.image, "verADD.pgm");*/
+	   
+	   /* ajout 1 ligne */
+	   /*sc.readpgm("graou/test.pgm");
+	   sc.addLines();
+	   sc.writepgm(sc.image, "honzadd.pgm");*/
+	   
+	   /* ajout 50 lignes */
+	   sc.readpgm("graou/t.pgm");
+	   sc.addNLines(50);
+	   sc.writepgm(sc.image, "veradd.pgm");
 	}
+
+   
 
    
 }
