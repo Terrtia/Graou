@@ -120,6 +120,68 @@ public class SeamCarving {
 	}
 	
 	/**
+	 * Graphe vertical pour l'algorithme de Suurballe
+	 * @param itr - facteurs d'intérêts de l'image
+	 * @return - graphe vertical des facteurs d'intérêts
+	 */
+	public Graph verticalToGraph2(int[][] itr) {
+		int nbSommets = width * height + 2 + width * (height - 1);
+		int i, j;
+		Graph g = new Graph(nbSommets);
+		
+		// sommet tout en haut
+		for (j = 0; j < width ; j++)					
+			  g.addEdge(new Edge(0, j+1, 0));
+		
+		// première ligne
+		for (j = 0; j < width ; j++)
+		  {
+			  // arête vers la gauche
+			  if(j > 0) {
+				  g.addEdge(new Edge(j+1, width+(j-1)+1, itr[0][j]));
+			  }
+			  // arête vers la droite
+			  if(j < width-1) {
+				  g.addEdge(new Edge(j+1, width+(j+1)+1, itr[0][j]));
+			  }
+			  // arête centrale
+			  g.addEdge(new Edge(j+1, width+j+1, itr[0][j]));
+		  }
+		
+		// lignes intérieures
+		for (i = 1; i < height-1; i++)
+		{
+			for (j = 0; j < width ; j++) {
+				// arête de poids 0
+				g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, 0));
+				
+			}
+			  for (j = 0; j < width ; j++)
+			  {
+				  // arête vers la gauche
+				  if(j > 0) {
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j, itr[i][j]));
+				  }
+				  // arête vers la droite
+				  if(j < width-1) {
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+2, itr[i][j]));
+				  }
+				  // arête centrale
+				  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[i][j]));
+				  
+			  }
+		}
+		
+		// sommet tout en bas
+		for (j = 0; j < width ; j++)		  
+			  g.addEdge(new Edge(width*(height-1)+j+1+width*(height-2), height*width+1+width*(height-1), itr[i][j]));
+		
+		
+		return g;
+	}
+	
+	
+	/**
 	 * Lit un fichier pgm
 	 * @param fn - nom du fichier à lire
 	 * @return un tableau à 2 dimensions contenant la valeur en niveaux de gris de chaque pixel de l'image (0 - 255)
@@ -626,9 +688,17 @@ public void addLines() {
 	   sc.writepgm(sc.image, "honzadd.pgm");*/
 	   
 	   /* ajout 50 lignes */
-	   sc.readpgm("graou/t.pgm");
+	   /*sc.readpgm("graou/t.pgm");
 	   sc.addNLines(50);
-	   sc.writepgm(sc.image, "veradd.pgm");
+	   sc.writepgm(sc.image, "veradd.pgm");*/
+	   
+	   /* tograph2 PARTIE 2 */
+	   int[][] image = sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test.pgm");
+	   Graph g = sc.verticalToGraph(image);
+	   g.writeFile("graph.dot");
+	   g = sc.verticalToGraph2(image);
+	   g.writeFile("graph2.dot");
+	   //sc.writepgm(sc.image, "veradd.pgm");
 	}
 
    
