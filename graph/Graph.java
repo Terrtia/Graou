@@ -1,6 +1,7 @@
 package graou.graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.io.*;
 
 /**
@@ -105,5 +106,35 @@ public class Graph
 		  {
 		  }						
 	 }
+
+   public void swapEdge(ArrayList<Integer> sommets, int s) {
+	   
+	   int deb = s;
+	   //Remise dans l'ordre croissant des sommets
+	   Collections.reverse(sommets);
+	   
+	   for(Integer sommet : sommets){
+		   Edge e = this.getEdgeFromTo(deb, sommet);
+		   e.swapToFromZeroCost();
+		   
+		   deb = sommet;
+	   } 
+	   
+	   int last = this.V - 1;
+	   this.getEdgeFromTo(deb, last).swapToFromZeroCost();
+   }
+   
+   public Edge getEdgeFromTo(int from, int to){
+	   Edge res = null;
+	
+	   Iterable<Edge> next = this.next(from);
+	   for(Edge e : next){
+		   if(e.getTo() == to) {
+			   
+			   res = e;
+		   }
+	   }
+	   return res;
+   }
    
 }

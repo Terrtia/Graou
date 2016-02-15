@@ -46,4 +46,18 @@ public class Edge {
 	   return this.cost;
    }
    
+   /**
+    * Change le sens de l'arrête entre 2 sommets
+    */
+   public void swapToFromZeroCost() {
+	   
+	   int u = this.from;
+	   int v = this.to;
+	   
+	   this.from = v;
+	   this.to = u;
+	   this.cost = 0;
+	   
+   }
+   
 }

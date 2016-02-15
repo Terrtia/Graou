@@ -625,6 +625,35 @@ public void addLines() {
 	   }
    }
    
+   public void verticaltwoPath() {
+	   
+	   this.interest = this.verticalInterest(image);
+	   int nbPixels = height * width;
+	   
+	   Dijkstra d = new Dijkstra();
+	   Graph g = this.verticalToGraph2(interest);
+	   g.writeFile("g.dot");
+	   //recherche du premier chemin
+	   ArrayList<Integer> chemin1 = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   
+	   for(Integer i : chemin1){
+		   System.out.println(i);
+		   }
+	   System.out.println("");
+	      
+	   int s = 0; //sommet de depart
+	   Graph g1 = g;
+	   
+	   g1.swapEdge(chemin1, s);
+	   g1.writeFile("graphInv.dot");
+	   //recherche du second chemin
+	   ArrayList<Integer> chemin2 = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   
+	   for(Integer i : chemin2){
+	   System.out.println(i);
+	   }
+   }
+   
    /**
     * Test
     */
@@ -693,12 +722,16 @@ public void addLines() {
 	   sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* tograph2 PARTIE 2 */
-	   int[][] image = sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test.pgm");
+	   /*int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
 	   Graph g = sc.verticalToGraph(image);
 	   g.writeFile("graph.dot");
 	   g = sc.verticalToGraph2(image);
 	   g.writeFile("graph2.dot");
-	   //sc.writepgm(sc.image, "veradd.pgm");
+	   //sc.writepgm(sc.image, "veradd.pgm");*/
+	   
+	   /* verticalTwoPath */
+	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.verticaltwoPath();
 	}
 
    
