@@ -504,25 +504,6 @@ public class SeamCarving {
 	   boolean equals;
 	   int pos,k;
 	   
-	   /*int i,j;
-	   int l = 0;
-	   int nbSommet = 1;
-	   for(i = 0;i < height;i++) {
-		   for(j = 0;j < width;j++) {
-			   if(!res.contains(nbSommet)) {
-				   if(color) {
-					   for(k = 0;k < 3;k++)
-						   newImageColor[i][l][k] = this.imageRgb[i][j][k];
-				   }else {
-					   newImage[i][l] = this.image[i][j];
-				   }
-				   l++;
-			   }
-			   nbSommet++;
-		   }
-		   l = 0;
-	   }*/
-	   
 	   for(int l : res){
 		   column = 0;
 		   pos = l%this.width - 1;
