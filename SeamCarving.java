@@ -504,6 +504,25 @@ public class SeamCarving {
 	   boolean equals;
 	   int pos,k;
 	   
+	   /*int i,j;
+	   int l = 0;
+	   int nbSommet = 1;
+	   for(i = 0;i < height;i++) {
+		   for(j = 0;j < width;j++) {
+			   if(!res.contains(nbSommet)) {
+				   if(color) {
+					   for(k = 0;k < 3;k++)
+						   newImageColor[i][l][k] = this.imageRgb[i][j][k];
+				   }else {
+					   newImage[i][l] = this.image[i][j];
+				   }
+				   l++;
+			   }
+			   nbSommet++;
+		   }
+		   l = 0;
+	   }*/
+	   
 	   for(int l : res){
 		   column = 0;
 		   pos = l%this.width - 1;
@@ -914,19 +933,18 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();
+	   //int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   //sc.verticaltwoPath();
 	   
 
 	   /* read & write & deleteColumns ppm */
 	   
 	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");	   
-	   //sc.convertRgbToGray(imagePpm);
-	   //sc.color = false;
-	   sc.deleteNColumns(100);
-	   //sc.writepgm(sc.image, "convert.pgm");
-	   //sc.deleteNColumns(50);
+	   sc.deleteNLines(50);
 	   sc.writeppm(sc.imageRgb, "ppm.ppm");
+	   
+	   
+	   
 	}
 
    
