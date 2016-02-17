@@ -1,6 +1,7 @@
 package graou;
 
 import graou.algo.Dijkstra;
+import graou.algo.Suurballe;
 import graou.graph.Edge;
 import graou.graph.Graph;
 
@@ -776,36 +777,68 @@ public void addLines() {
 	   }
    }
    
+   public void twoPath(Graph g, int s, int t){
+	   
+   }
+   
+   
    public void verticaltwoPath() {
 	   
 	   this.interest = this.verticalInterest(image);
 	   int nbPixels = height * width;
 	   
-	   Dijkstra d = new Dijkstra();
+	   Suurballe sb = new Suurballe();
 	   Graph g = this.verticalToGraph2(interest);
-	   g.writeFile("g.dot");
+	   g.writeFile("g2Verti.dot");
 	   //recherche du premier chemin
-	   ArrayList<Integer> chemin1 = d.rechercheChemin(g, 0, g.vertices() - 1);
+	   ArrayList<Integer> chemin1 = sb.rechercheChemin(g, 0, g.vertices() - 1, this.interest);
 	   
-	   for(Integer i : chemin1){
-		   System.out.println(i);
-		   }
-	   System.out.println("");
-	      
-	   int s = 0; //sommet de depart
-	   Graph g1 = g;
 	   
-	   g1.swapEdge(chemin1, s);
-	   g1.writeFile("graphInv.dot");
-	   //recherche du second chemin
-	   ArrayList<Integer> chemin2 = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
-	   for(Integer i : chemin2){
-	   System.out.println(i);
-	   }
    }
    
-   /**
+   private ArrayList<Integer> PlusCourtChemin(ArrayList<Integer> chemin2) {
+	   int courant;
+	   int precedent = -1;   
+	   
+	   for(int i=0; i< chemin2.size(); i++){
+		   courant = chemin2.get(i);
+		   
+		   if(courant < precedent){
+			   
+			   if( (i+1) < chemin2.size() && (i-2) >= 0){
+				   int suivant = chemin2.get(i + 1);
+				   int origine = chemin2.get(i - 2);
+				   int indexOrigine = i - 2;
+				   	
+				   if(origine + this.width == suivant){
+					   ArrayList<Integer> temp = new ArrayList<>();
+					   boolean egal = false;;
+					   for(int j=0; j< chemin2.size(); j++){
+						   if(chemin2.get(j) == origine){
+							   egal = true;
+						   }
+						   if(!egal){
+							   temp.add(chemin2.get(j));
+						   } else {
+							   if(j == indexOrigine){
+								   temp.add(chemin2.get(j));
+							   }
+							   if(j > indexOrigine + 2){
+								   temp.add(chemin2.get(j));
+							   }
+						   }
+					   }
+					   return this.PlusCourtChemin(temp);
+				   }
+			   }
+		   }
+		   precedent = chemin2.get(i);
+	   }
+	   return chemin2;
+   }
+
+/**
     * Test
     */
    public static void main(String[] args) {
@@ -881,9 +914,10 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   /*int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();*/
+	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.verticaltwoPath();
 	   
+
 	   /* read & write & deleteColumns ppm */
 	   
 	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");	   

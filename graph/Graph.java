@@ -13,6 +13,7 @@ public class Graph
 {
    private ArrayList<Edge>[] adj;
    private final int V;
+   private int coutMinSommetFinal;
    int E;
 @SuppressWarnings("unchecked")
 /**
@@ -71,7 +72,22 @@ public class Graph
 		  if (e.getTo() != v)
 			n.add(e);
 		return n;
-	 }      
+	 }
+   
+   /**
+    * @param v - numéro du sommet
+    * @return la liste des arêtes entrantes du sommet numéro v
+    */
+   public Iterable<Edge> previous(int v)
+	 {
+		ArrayList<Edge> n = new ArrayList<Edge>();
+		for (Edge e: adj(v)){
+		  if (e.getFrom() != v){
+			  n.add(e);
+		  }
+		}
+		return n;
+	 }
    
    /**
     * @return la liste de toutes les arêtes sortantes de tous les sommets
@@ -135,6 +151,81 @@ public class Graph
 		   }
 	   }
 	   return res;
+   }
+   
+   public int getMinCost(int sommet) {
+	   int res = 10000;
+	   Iterable<Edge> n = this.adj(sommet);
+	   for(Edge e : n){
+			  res = e.getMinCost();
+		   } 
+	   return res;
+   }
+   
+   public void setMinCost(int sommet, int minCost) {
+	   Iterable<Edge> n = this.next(sommet);
+	   for(Edge e : n){
+		  e.setMinCost(minCost);
+	   }
+	   if(sommet == this.V - 1){
+		   this.coutMinSommetFinal = minCost;
+	   }
+   }
+   
+   //public int getVMinCost(int s) {}
+   
+   public void calcMinCost(int depart) {
+	   int sommetCourant;
+	   int coutMin = 10000;
+	   
+	   this.setMinCost(depart, 0);// le sommet de depart, coutMin = 0
+	   
+	   for(int i=depart + 1; i<V; i++){
+		   coutMin = 10000;
+		   
+		   sommetCourant = i;
+		   
+		   Iterable<Edge> previous = this.previous(sommetCourant);
+		   
+		   for(Edge e : previous){
+			   int c = e.getMinCost() + e.getCost();
+			   if(c < coutMin){
+				   coutMin = c;
+			   }
+		   }
+		   
+		   this.setMinCost(sommetCourant, coutMin);
+	   }
+   }
+   
+   public void diffCost(int depart) {
+	   int sommetCourant;
+	   int minCostU;
+	   int minCostV;
+	   int newCost;
+	   
+	   for(int i=depart + 1; i<V; i++){
+		   sommetCourant = i;
+		   minCostU = this.getMinCost(sommetCourant);
+		   
+		   Iterable<Edge> next = this.next(sommetCourant);
+		   
+		   for(Edge e : next){
+			  
+			  minCostV = this.getMinCost(e.getTo());
+			  if(e.getTo() == this.V - 1){
+				  minCostV = this.coutMinSommetFinal;
+			  }
+			  
+			  newCost = (minCostU - minCostV) + e.getCost();
+			  
+			  if(newCost > 0){
+				  e.setCost(newCost);
+			  } else {
+				  e.setCost(0);
+			  }
+		   }   
+	   }
    }
    
 }

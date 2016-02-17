@@ -10,6 +10,7 @@ public class Edge {
    private int from;
    private int to;
    private int cost;
+   private int uMinCost; //valeur du chemin de cout minimal pour le sommet u
    
    /**
     * Constructeur
@@ -58,6 +59,22 @@ public class Edge {
 	   this.to = u;
 	   this.cost = 0;
 	   
+   }
+   
+   public void setCost(int c) {
+	   this.cost = c;
+   }
+   
+   public int getMinCost() {
+	   return this.uMinCost;
+   }
+   
+   public void setMinCost(int mincost) {
+	   this.uMinCost = mincost;
+   }
+   
+   public int getVMinCost() {
+	   return this.getTo();
    }
    
 }
