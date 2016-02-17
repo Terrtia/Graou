@@ -888,17 +888,17 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   /*int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();*/
+	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.verticaltwoPath();
 	   
 	   /* read & write ppm */
-	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");
+	   /*int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");
 	   sc.convertRgbToGray(imagePpm);
 	   sc.writepgm(sc.image, "convert.pgm");
 	   
 	   sc.deleteNColumns(90);
 	   
-	   sc.writeppm(sc.imageRgb, "ppm.ppm");
+	   sc.writeppm(sc.imageRgb, "ppm.ppm");*/
 	}
 
    
