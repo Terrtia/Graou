@@ -6,6 +6,7 @@ import graou.graph.Edge;
 import graou.graph.Graph;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,7 +27,9 @@ public class SeamCarving {
 	private int width;
 	private int height;
 	private int[][] image;
+	private int[][][] imageRgb;
 	private int[][] interest;
+	private boolean color;
 	
 	public SeamCarving() {
 
@@ -223,6 +226,7 @@ public class SeamCarving {
             s.close();
             f.close();
             
+            this.color = false;
             //DEBUG
  		   	System.out.println("lecture du fichier " + filename + " reussite\n");
  		   
@@ -240,6 +244,60 @@ public class SeamCarving {
     }
    
    /**
+     * Lit un fichier ppm (couleurs rgb)
+	 * @param fn - nom du fichier à lire
+	 * @return un tableau à 3 dimensions contenant la valeur en rgb de chaque pixel de l'image (0 - 255)
+    */
+   public int[][][] readppm(String filename) {
+	  try {
+		FileReader f;
+		f = new FileReader(filename);
+   		BufferedReader d = new BufferedReader(f);
+   	
+       this.magic = d.readLine() + "\n";
+       String line = d.readLine();
+       while (line.startsWith("#")) {
+       	line = d.readLine();
+       }
+       Scanner s = new Scanner(line);
+       this.width = s.nextInt();
+       this.height = s.nextInt();
+       s.close();
+       line = d.readLine();
+       s = new Scanner(line);
+       this.maxVal = s.nextInt();
+       s.close();
+       
+       this.imageRgb = new int[height][width][3];
+       s = new Scanner(d);
+       int count = 0;
+       int rgb = 0;
+       while (count < height*width) {
+    	   for(rgb = 0; rgb < 3; rgb++) {
+    	       	imageRgb[count / width][count % width][rgb] = s.nextInt();
+    	   }
+    	   count++;
+       }
+       s.close();
+       f.close();
+       
+       this.color = true;
+       //DEBUG
+	   	System.out.println("lecture du fichier " + filename + " reussite\n");
+	   
+       return imageRgb;
+	  }
+       catch(Throwable t) {
+           t.printStackTrace(System.err) ;
+           
+           //DEBUG
+           System.err.println("lecture du fichier " + filename + " impossible\n");
+           
+           return null;
+       }
+   }
+   
+   /**
     * Crée une image pgm
     * @param image - tableau à 2 dimensions représentant les pixels de l'image
     * @param filename - nom du fichier à créer
@@ -250,6 +308,7 @@ public class SeamCarving {
 		   String s;
 		   FileOutputStream fos = new FileOutputStream(filename);
 		   
+		   magic = "P2\n";
 		   fos.write(magic.getBytes());
 		   
 		   s = "#write by Graou\n";
@@ -282,6 +341,63 @@ public class SeamCarving {
 		   System.err.println("ecriture du fichier "+ filename + " impossible\n");
 	   }
 	   
+   }
+   
+   /**
+    * Crée une image ppm
+    * @param image - tableau à 3 dimensions représentant les pixels de l'image
+    * @param filename - nom du fichier à créer
+    */
+   public void writeppm(int[][][] image, String filename) {
+	   
+	   try {
+		   String s;
+		   FileOutputStream fos = new FileOutputStream(filename);
+		   
+		   magic = "P3\n";
+		   fos.write(magic.getBytes());
+		   
+		   s = "#write by Graou\n";
+		   fos.write(s.getBytes());
+		   
+		   s = width + " " + height + "\n";
+		   fos.write(s.getBytes());
+		   
+		   s = String.valueOf(this.maxVal) + "\n";
+		   fos.write(s.getBytes());
+		   
+		   for(int i =0; i<height; i++){
+			   for(int j=0; j<width; j++){
+				   for(int k = 0;k < 3;k++) {
+					   s = String.valueOf(imageRgb[i][j][k]) + " ";
+					   fos.write(s.getBytes());
+				   }
+			   }
+			   s = "\n";
+			   fos.write(s.getBytes());
+		   }
+		   
+		   fos.close();
+		   
+		   //DEBUG
+		   System.out.println("ecriture du fichier " + filename + " reussite\n");
+		   
+	   } catch (IOException e) {
+		   e.printStackTrace(System.err);
+		   
+		   //DEBUG
+		   System.err.println("ecriture du fichier "+ filename + " impossible\n");
+	   }
+	   
+   }
+   
+   public void convertRgbToGray(int[][][] img) {
+	   this.image = new int[height][width];
+	   for(int i = 0;i < height;i++) {
+		   for(int j = 0;j < width;j++) {
+			   this.image[i][j] = (int) (0.21 * img[i][j][0] + 0.72 * img[i][j][1] + 0.07 * img[i][j][2]);
+		   }
+	   }
    }
    
    /**
@@ -379,12 +495,13 @@ public class SeamCarving {
 	  
 	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
+	   int[][][] newImageColor = new int[height][width - 1][3];
 	   int[][] newImage = new int[height][width - 1];
 	   
 	   int line = height - 1;
 	   int column;
 	   boolean equals;
-	   int pos;
+	   int pos,k;
 	   
 	   for(int l : res){
 		   column = 0;
@@ -398,10 +515,18 @@ public class SeamCarving {
 				   }
 				   
 				   if(equals == false){
-					   newImage[line][column] = this.image[line][column];
+					   if(color) {
+						   for(k = 0;k < 3;k++)
+							   newImageColor[line][column][k] = this.imageRgb[line][column][k];
+					   }else
+						   newImage[line][column] = this.image[line][column];
 				   } else if(equals == true){
 					   if(column < width){
-						   newImage[line][column] = this.image[line][column + 1];
+						   if(color) {
+							   for(k = 0;k < 3;k++)
+								   newImageColor[line][column][k] = this.imageRgb[line][column + 1][k];
+						   }else
+							   newImage[line][column] = this.image[line][column + 1];
 					   }
 				   } else {
 					   System.err.println("Error 0x087A4E652");
@@ -763,8 +888,17 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();
+	   /*int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.verticaltwoPath();*/
+	   
+	   /* read & write ppm */
+	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");
+	   sc.convertRgbToGray(imagePpm);
+	   sc.writepgm(sc.image, "convert.pgm");
+	   
+	   sc.deleteNColumns(90);
+	   
+	   sc.writeppm(sc.imageRgb, "ppm.ppm");
 	}
 
    
