@@ -11,23 +11,32 @@ public class Modele extends Observable {
 	private SeamCarving sc;
 	private int width;
 	private int height;
+	private boolean color;
 	
 	
 	public Modele() {
 		sc = new SeamCarving();
 		width = 0;
 		height = 0;
+		color = false;
 		file = null;
 		fileRes = null;
 	}
 	
 	public void setFile(String s) {
 		file = s;
-		sc.readpgm(file);
+		if(color)
+			sc.readppm(file);
+		else
+			sc.readpgm(file);
 		width = sc.getWidth();
 		height = sc.getHeight();
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void setColor(boolean b) {
+		color = b;
 	}
 	
 	public String getFile() {
