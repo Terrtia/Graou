@@ -1,6 +1,7 @@
 package graou.algo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import graou.graph.Edge;
 import graou.graph.Graph;
@@ -25,6 +26,7 @@ public class Dijkstra {
 		
 		int i = 0;
 		int cout = 0;
+		int sommet;
 		
 		// initialisation du tableau des parents
 		int[] parent = new int[g.vertices()];
@@ -34,8 +36,9 @@ public class Dijkstra {
 		
 		for(i = 0;i < nbSommets;i++) {
 			// calcul du coût
-			cout = h.priority(h.pop());
-			for(Edge e : g.next(i)) {
+			sommet = h.pop();
+			cout = h.priority(sommet);
+			for(Edge e : g.next(sommet)) {
 				// mise à jour de la priorité et du parent si un chemin plus petit est trouvé
 				if(e.getCost()+cout < h.priority(e.getTo())) {
 					h.decreaseKey(e.getTo(), cout + e.getCost());
@@ -44,23 +47,14 @@ public class Dijkstra {
 			}
 		}
 		
-		// construction graphe chemin de coût minimal en partant de la fin
-		/*Graph res = new Graph(g.vertices());
-		int sommet = t;
-		while(sommet != s) {
-			res.addEdge(new Edge(parent[sommet], sommet, h.priority(sommet)-h.priority(parent[sommet])));
-			sommet = parent[sommet];
-		}*/
-		
 		// remplissage de l'arraylist avec les sommets du chemin de coût minimal
 		ArrayList<Integer> liste = new ArrayList<Integer>();
-		int sommet = parent[t];
+		sommet = parent[t];
 		while(sommet != s) {
 			liste.add(sommet);
 			sommet = parent[sommet];
 		}
 	
-		//return res;
 		return liste;
 
 	}

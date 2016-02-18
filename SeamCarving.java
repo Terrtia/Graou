@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -76,7 +77,7 @@ public class SeamCarving {
 				  g.addEdge(new Edge(width*i +j+1, width*(i+1)+j+1, itr[i][j]));
 			  }
 		}
-		
+
 		// sommet tout en bas
 		for (j = 0; j < width ; j++)		  
 			  g.addEdge(new Edge(width*(height-1)+j+1, height*width+1, itr[i][j]));
@@ -537,7 +538,11 @@ public class SeamCarving {
 		   line--;
 	   }
 	   
-	   this.image = newImage;
+	   if(color)
+		   this.imageRgb = newImageColor;
+	   else
+		   this.image = newImage;
+	   
 	   this.width = width - 1;   	   
    }
    
@@ -553,11 +558,12 @@ public class SeamCarving {
 	   ArrayList<Integer> res = d.rechercheChemin(g, 0, g.vertices() - 1);
 	   
 	   int[][] newImage = new int[height - 1][width];
+	   int[][][] newImageColor = new int[height - 1][width][3];
 	   
 	   int line;
 	   int column = width - 1;
 	   boolean equals;
-	   int pos;
+	   int pos,k;
 	   
 	   for(int l : res){
 		   line = 0;
@@ -571,10 +577,18 @@ public class SeamCarving {
 				   }
 				   
 				   if(equals == false){
-					   newImage[line][column] = this.image[line][column];
+					   if(color) {
+						   for(k = 0;k < 3;k++)
+							   newImageColor[line][column][k] = this.imageRgb[line][column][k];
+					   }else
+						   newImage[line][column] = this.image[line][column];
 				   } else if(equals == true){
 					   if(column < width){
-						   newImage[line][column] = this.image[line + 1][column];
+						   if(color) {
+							   for(k = 0;k < 3;k++)
+								   newImageColor[line][column][k] = this.imageRgb[line + 1][column][k];
+						   }else
+							   newImage[line][column] = this.image[line + 1][column];
 					   }
 				   } else {
 					   System.err.println("Error 0x087A4E652");
@@ -585,19 +599,27 @@ public class SeamCarving {
 		   column--;
 	   }
 	   
-	   this.image = newImage;
+	   if(color)
+		   this.imageRgb = newImageColor;
+	   else
+		   this.image = newImage;
+	   
 	   this.height = height - 1;   	   
    }
 
    
    public void deleteNColumns(int nb){
 	   for(int i=0; i<nb; i++){
+		   if(color)
+			   convertRgbToGray(imageRgb);
 		   this.deleteColumns();
 	   }
    }
    
    public void deleteNLines(int nb) {
 	   for(int i=0; i<nb; i++){
+		   if(color)
+			   convertRgbToGray(imageRgb);
 		   this.deleteLines();
 	   }
    }
@@ -740,12 +762,16 @@ public void addLines() {
    
 	   	
    public void addNColumns(int nb) {
+	   if(color)
+		   convertRgbToGray(imageRgb);
 	   for(int i=0; i<nb; i++){
 		   this.addColumns();
 	   }
    }
    
    public void addNLines(int nb) {
+	   if(color)
+		   convertRgbToGray(imageRgb);
 	   for(int i=0; i<nb; i++){
 		   this.addLines();
 	   }
@@ -854,8 +880,8 @@ public void addLines() {
 	   sc.writepgm(sc.image, "honzDelet.pgm");*/
 	   
 	   /* Suppression 50 lignes */
-	   /*sc.readpgm("graou/t.pgm");
-	   sc.deleteNLines(50);
+	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
+	   sc.deleteNColumns(50);
 	   sc.writepgm(sc.image, "verDeletet.pgm");*/
 	   
 	   /* ajout 1 colonnes */
@@ -887,17 +913,18 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();
+	   //int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   //sc.verticaltwoPath();
 	   
-	   /* read & write ppm */
-	   /*int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");
-	   sc.convertRgbToGray(imagePpm);
-	   sc.writepgm(sc.image, "convert.pgm");
+
+	   /* read & write & deleteColumns ppm */
 	   
-	   sc.deleteNColumns(90);
+	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");	   
+	   sc.deleteNLines(50);
+	   sc.writeppm(sc.imageRgb, "ppm.ppm");
 	   
-	   sc.writeppm(sc.imageRgb, "ppm.ppm");*/
+	   
+	   
 	}
 
    
