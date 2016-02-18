@@ -759,13 +759,12 @@ public void addLines() {
    public void verticaltwoPath() {
 	   
 	   this.interest = this.verticalInterest(image);
-	   int nbPixels = height * width;
 	   
 	   Suurballe sb = new Suurballe();
 	   Graph g = this.verticalToGraph2(interest);
 	   g.writeFile("g2Verti.dot");
 	   //recherche du premier chemin
-	   ArrayList<Integer> chemin1 = sb.rechercheChemin(g, 0, g.vertices() - 1, this.interest);
+	   ArrayList<Integer> chemin = sb.rechercheChemin(g, 0, g.vertices() - 1, this.interest);
 	   
 	   
 	   

@@ -171,8 +171,7 @@ public class Graph
 		   this.coutMinSommetFinal = minCost;
 	   }
    }
-   
-   //public int getVMinCost(int s) {}
+  
    
    public void calcMinCost(int depart) {
 	   int sommetCourant;
