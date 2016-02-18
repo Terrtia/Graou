@@ -9,7 +9,7 @@ import java.io.*;
  *
  */
 
-public class Graph
+public class Graph implements Cloneable
 {
    private ArrayList<Edge>[] adj;
    private final int V;
@@ -29,7 +29,6 @@ public class Graph
 		adj = (ArrayList<Edge>[]) new ArrayList[N];
 		for (int v = 0; v < N; v++)
 		  adj[v] = new ArrayList<Edge>();
-		
 	 }
 
 /**
@@ -226,5 +225,33 @@ public class Graph
 		   }   
 	   }
    }
+
+public boolean estCheminSommetFinal(int i) {
+	boolean res = false;
+	Iterable<Edge> n = this.next(i);
+	for(Edge e : n){
+		if(e.getTo() == this.vertices() - 1){
+			res = true;
+		}
+	}
+	return res;
+}
+
+public ArrayList<Integer> getDerniersSommets() {
+	ArrayList<Integer> dernierSommets = new ArrayList<Integer>();
+	
+	for(int i=1; i<this.vertices() - 1; i++){
+		Iterable<Edge> n = this.next(i);
+		for(Edge e : n){		
+			if(e.getTo() == this.vertices() - 1){
+				if(!dernierSommets.contains(i)){
+					dernierSommets.add(i);
+				}
+			}
+		}	
+	}
+	
+	return dernierSommets;
+}
    
 }

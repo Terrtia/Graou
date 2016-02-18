@@ -785,6 +785,7 @@ public void addLines() {
    public void verticaltwoPath() {
 	   
 	   this.interest = this.verticalInterest(image);
+	   int nbPixels = height * width;
 	   
 	   Suurballe sb = new Suurballe();
 	   Graph g = this.verticalToGraph2(interest);
@@ -794,49 +795,63 @@ public void addLines() {
 	   
 	   
 	   
+	   //this.tabDeleteColum(chemin1);
+	      
    }
    
-   private ArrayList<Integer> PlusCourtChemin(ArrayList<Integer> chemin2) {
-	   int courant;
-	   int precedent = -1;   
+   public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   
-	   for(int i=0; i< chemin2.size(); i++){
-		   courant = chemin2.get(i);
+	   int[][][] newImageColor = new int[height][width - 1][3];
+	   int[][] newImage = new int[height][width - 1];
+	   int nbPixels = height * width;
+	   
+	   int line = height - 1;
+	   int column;
+	   boolean equals;
+	   int pos,k;
+	   
+	   for(int l : chemin){
+		   column = 0;
+		   pos = l%this.width - 1;
+		   equals = false;
 		   
-		   if(courant < precedent){
-			   
-			   if( (i+1) < chemin2.size() && (i-2) >= 0){
-				   int suivant = chemin2.get(i + 1);
-				   int origine = chemin2.get(i - 2);
-				   int indexOrigine = i - 2;
-				   	
-				   if(origine + this.width == suivant){
-					   ArrayList<Integer> temp = new ArrayList<>();
-					   boolean egal = false;;
-					   for(int j=0; j< chemin2.size(); j++){
-						   if(chemin2.get(j) == origine){
-							   egal = true;
-						   }
-						   if(!egal){
-							   temp.add(chemin2.get(j));
-						   } else {
-							   if(j == indexOrigine){
-								   temp.add(chemin2.get(j));
-							   }
-							   if(j > indexOrigine + 2){
-								   temp.add(chemin2.get(j));
-							   }
-						   }
-					   }
-					   return this.PlusCourtChemin(temp);
+		   if(l != 0 && l != (nbPixels + 1) ){
+			   while(column != this.width -1){
+				   if(pos == column){
+					   equals = true;
 				   }
+				   
+				   if(equals == false){
+					   if(color) {
+						   for(k = 0;k < 3;k++)
+							   newImageColor[line][column][k] = this.imageRgb[line][column][k];
+					   }else
+						   newImage[line][column] = this.image[line][column];
+				   } else if(equals == true){
+					   if(column < width){
+						   if(color) {
+							   for(k = 0;k < 3;k++)
+								   newImageColor[line][column][k] = this.imageRgb[line][column + 1][k];
+						   }else
+							   newImage[line][column] = this.image[line][column + 1];
+					   }
+				   } else {
+					   System.err.println("Error 0x087A4E652");
+				   } 
+				   column++;
 			   }
 		   }
-		   precedent = chemin2.get(i);
+		   line--;
 	   }
-	   return chemin2;
+	   
+	   if(color)
+		   this.imageRgb = newImageColor;
+	   else
+		   this.image = newImage;
+	   
+	   this.width = width - 1;
    }
-
+   
 /**
     * Test
     */
@@ -913,15 +928,15 @@ public void addLines() {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* verticalTwoPath */
-	   //int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   //sc.verticaltwoPath();
+	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.verticaltwoPath();
 	   
 
 	   /* read & write & deleteColumns ppm */
 	   
-	   int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");	   
+	   /*int[][][] imagePpm = sc.readppm("/home/blplplp/workspace/Graou/src/graou/snail.ascii.ppm");	   
 	   sc.deleteNLines(50);
-	   sc.writeppm(sc.imageRgb, "ppm.ppm");
+	   sc.writeppm(sc.imageRgb, "ppm.ppm");*/
 	   
 	   
 	   
