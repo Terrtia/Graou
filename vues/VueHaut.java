@@ -12,6 +12,8 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class VueHaut extends JPanel implements Observer {
 
@@ -23,7 +25,7 @@ public class VueHaut extends JPanel implements Observer {
 		m.addObserver(this);
 		
 		// Bouton choix de l'image pgm
-		JButton ouvrirFichier = new JButton("Choisir l'image pgm");
+		JButton ouvrirFichier = new JButton("Choisir l'image pgm ou ppm");
 		ouvrirFichier.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -35,9 +37,18 @@ public class VueHaut extends JPanel implements Observer {
 		        } catch(IOException e) {}
 				
 				JFileChooser dialogue = new JFileChooser(repertoireCourant);
-				dialogue.showOpenDialog(null);
-				if(dialogue.getSelectedFile() != null)
-					m.setFile(dialogue.getSelectedFile().getPath());
+				
+				FileFilter filter = new FileNameExtensionFilter("PGM and PPM files", new String[] {"pgm", "ppm"});
+				dialogue.setFileFilter(filter);
+				dialogue.addChoosableFileFilter(filter);
+				
+				int returnVal = dialogue.showOpenDialog(null);
+				if(dialogue.getSelectedFile() != null && returnVal == JFileChooser.APPROVE_OPTION) {
+					String file = dialogue.getSelectedFile().getPath();
+					if(file.endsWith(".ppm"))
+						m.setColor(true);
+					m.setFile(file);
+				}
 			}
 		});
 		
@@ -51,3 +62,4 @@ public class VueHaut extends JPanel implements Observer {
 	}
 
 }
+

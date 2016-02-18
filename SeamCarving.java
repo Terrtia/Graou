@@ -6,12 +6,10 @@ import graou.graph.Edge;
 import graou.graph.Graph;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -21,7 +19,6 @@ import java.util.Scanner;
 
 public class SeamCarving {
 
-	
 	private String filename;
 	private String magic;
 	private int maxVal;
@@ -31,6 +28,7 @@ public class SeamCarving {
 	private int[][][] imageRgb;
 	private int[][] interest;
 	private boolean color;
+	public static int progressValue;
 	
 	public SeamCarving() {
 
@@ -608,19 +606,23 @@ public class SeamCarving {
    }
 
    
-   public void deleteNColumns(int nb){
+   synchronized public void deleteNColumns(int nb){
+	   progressValue = 0;
 	   for(int i=0; i<nb; i++){
 		   if(color)
 			   convertRgbToGray(imageRgb);
 		   this.deleteColumns();
+		   progressValue = (i+1)*100/nb;
 	   }
    }
    
-   public void deleteNLines(int nb) {
+   synchronized public void deleteNLines(int nb) {
+	   progressValue = 0;
 	   for(int i=0; i<nb; i++){
 		   if(color)
 			   convertRgbToGray(imageRgb);
 		   this.deleteLines();
+		   progressValue = (i+1)*100/nb;
 	   }
    }
    
