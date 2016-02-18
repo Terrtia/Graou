@@ -20,13 +20,11 @@ public class Suurballe {
 		g.calcMinCost(s);
 		g.diffCost(s);
 		
-		g.writeFile("newCost.dot");
 		Graph g1 = new Graph(g.vertices());
 		
 		g1 = g;
 		   
 		g1.swapEdge(chemin1, s);
-		g1.writeFile("graphInv.dot");
 		
 		//recherche du second chemin
 		ArrayList<Integer> chemin2 = d.rechercheChemin(g1, 0, g1.vertices() - 1);

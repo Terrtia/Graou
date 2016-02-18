@@ -508,6 +508,9 @@ public class SeamCarving {
 	   for(int l : res){
 		   column = 0;
 		   pos = l%this.width - 1;
+		   if(pos == -1){
+			   pos = this.width - 1;
+		   }
 		   equals = false;
 		   
 		   if(l != 0 && l != (nbPixels + 1) ){
@@ -569,6 +572,9 @@ public class SeamCarving {
 	   for(int l : res){
 		   line = 0;
 		   pos = l%this.height - 1;
+		   if(pos == -1){
+			   pos = this.height - 1;
+		   }
 		   equals = false;
 		   
 		   if(l != 0 && l != (nbPixels + 1) ){
@@ -646,6 +652,9 @@ public class SeamCarving {
 	   for(int l : res){
 		   column = 0;
 		   pos = l%this.width - 1;
+		   if(pos == -1){
+			   pos = this.width - 1;
+		   }
 		   equals = false;
 		   
 		   if(l != 0 && l != (nbPixels + 1) ){
@@ -714,6 +723,9 @@ public void addLines() {
 	   for(int l : res){
 		   line = 0;
 		   pos = l%this.height - 1;
+		   if(pos == -1){
+			   pos = this.height - 1;
+		   }
 		   equals = false;
 		   
 		   if(l != 0 && l != (nbPixels + 1) ){
@@ -778,20 +790,15 @@ public void addLines() {
 	   }
    }
    
-   public void twoPath(Graph g, int s, int t){
-	   
-   }
    
-   
-   public void verticaltwoPath() {
+   public void deleteVerticaltwoPath() {
 	   
 	   this.interest = this.verticalInterest(image);
-	   int nbPixels = height * width;
 	   
 	   Suurballe sb = new Suurballe();
 	   Graph g = this.verticalToGraph2(interest);
-	   g.writeFile("g2Verti.dot");
-	   //recherche du premier chemin
+	   
+	   //recherche des chemins
 	   ArrayList<Integer> chemin = sb.rechercheChemin(g, 0, g.vertices() - 1, this.interest);
 	   
 	   ArrayList<Integer> chemin1 = new ArrayList<>();
@@ -809,22 +816,122 @@ public void addLines() {
 				chemin2.add(chemin.get(i));
 			}
 		}
-	   /*
-	   System.out.println("c1");
-	   for(Integer i : chemin1){
-			System.out.println(i);
-		}
-	   System.out.println("c2");
-	   for(Integer i : chemin2){
-			System.out.println(i);
-		}*/
 	   
-	   Collections.reverse(chemin1);
-	   Collections.reverse(chemin2);
-	   
+	   this.tabDeleteColum(chemin1, chemin2);
 	   
    }
    
+   
+public void tabDeleteColum(ArrayList<Integer> chemin1, ArrayList<Integer> chemin2) {
+	   
+	   int[][][] newImageColor = new int[height][width - 2][3];
+	   int[][] newImage = new int[height][width - 2];
+	   int nbPixels = height * width;
+	   int petit;
+	   int grand;
+	   
+	   //int line = height - 1;
+	   int line = 0;
+	   int column;
+	   boolean equalsP;
+	   boolean equalsG;
+	   int posPetit;
+	   int posGrand;
+	   int k;
+	   
+	   for(int i=0; i<chemin1.size(); i++){
+		   if(chemin1.get(i) <= chemin2.get(i)){
+			   petit = chemin1.get(i);
+			   grand = chemin2.get(i);
+		   } else {
+			   petit = chemin2.get(i);
+			   grand = chemin1.get(i);
+		   }
+		   		   
+			   
+		   column = 0;
+		   posPetit = petit%(this.width) -1;
+		   posGrand = grand%(this.width) -1;
+		   
+		   if(posPetit == -1){
+			   posPetit = this.width - 1;
+		   }
+		   if(posGrand == -1){
+			   posGrand = this.width - 1;
+		   }
+		   
+		   equalsP = false;
+		   equalsG = false;
+		   
+		   for( column=0; column<width-2; column++){
+			 
+			   if(petit != 0 && petit != (nbPixels + 1) ){
+					   if(posPetit == column){
+						   equalsP = true;
+					   }
+					   
+					   if(equalsP == false){
+						   if(color) {
+							   for(k = 0;k < 3;k++)
+								   newImageColor[line][column][k] = this.imageRgb[line][column][k];
+						   }else {
+							   newImage[line][column] = this.image[line][column];
+						   }
+						   
+					   } else if(equalsP == true){
+						   //grand
+						   if(grand != 0 && grand != (nbPixels + 1) ){
+							   
+								   if(posGrand == column + 1){
+									   equalsG = true;
+								   }
+								   
+								   if(equalsG == false){
+									   if(column < width -1){
+										   if(color) {
+											   for(k = 0;k < 3;k++)
+												   newImageColor[line][column][k] = this.imageRgb[line][column + 1][k];
+										   }else
+											   newImage[line][column] = this.image[line][column + 1];
+									   }
+									   
+								   } else if(equalsP == true){
+									   
+									   if(column < width - 1){
+										   if(color) {
+											   for(k = 0;k < 3;k++)
+												   newImageColor[line][column][k] = this.imageRgb[line][column + 2][k];
+										   }else
+											   newImage[line][column] = this.image[line][column + 2];		   
+									   }
+								   }
+						   }
+								      
+					   } else {
+						   System.err.println("Error 0x087A4E652");
+					   } 
+				   }
+		   }
+		   line++;
+	   }
+	   
+	   if(color) {
+		   this.imageRgb = newImageColor;
+	   } else {
+		   this.image = newImage;
+	   }
+	   
+	   this.width = width - 2;
+   }
+   
+	public void delete2NColumns(int nb){
+		for(int i=0; i<nb; i++){
+			if(color){
+				convertRgbToGray(imageRgb);
+			}
+			this.deleteVerticaltwoPath();
+	   }
+	}
    
 public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   
@@ -881,125 +988,6 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 		   this.image = newImage;
 	   
 	   this.width = width - 1;
-   }
-   
-   public void tabDeleteColum(ArrayList<Integer> chemin1, ArrayList<Integer> chemin2) {
-	   
-	   int[][][] newImageColor = new int[height][width - 2][3];
-	   int[][] newImage = new int[height][width - 2];
-	   int nbPixels = height * width;
-	   int petit;
-	   int grand;
-	   
-	   int line = height - 1;
-	   int column;
-	   boolean equalsP;
-	   boolean equalsG;
-	   int posPetit;
-	   int posGrand;
-	   int k;
-	   
-	   for(int i=0; i<chemin1.size(); i++){
-		   if(chemin1.get(i) <= chemin2.get(i)){
-			   petit = chemin1.get(i);
-			   grand = chemin2.get(i);
-		   } else {
-			   petit = chemin2.get(i);
-			   grand = chemin1.get(i);
-		   }
-		   
-			   //int l : chemin1   
-			   
-			   
-		   column = 0;
-		   posPetit = petit%(this.width) -1;
-		   posGrand = grand%(this.width) -1;
-		   
-		   if(posPetit == -1){
-			   posPetit = this.width - 1;
-		   }
-		   if(posGrand == -1){
-			   posGrand = this.width - 1;
-		   }
-		   
-		   System.out.println("width = " + this.width);
-		   System.out.println("POSGRAND = " + posGrand);
-		   System.out.println("test");
-		   
-		   equalsP = false;
-		   equalsG = false;
-		   
-		   for( column=0; column<width-1; column++){
-			   System.out.println("column = " + column);
-			 
-			   if(petit != 0 && petit != (nbPixels + 1) ){
-					   if(posPetit == column){
-						   equalsP = true;
-						   System.out.println("EqualsP = " + line);
-						   column++;
-					   }
-					   
-					   if(equalsP == false){
-						   if(color) {
-							   for(k = 0;k < 3;k++)
-								   newImageColor[line][column][k] = this.imageRgb[line][column][k];
-						   }else {
-							   newImage[line][column] = this.image[line][column];
-						   }
-						   
-					   } else if(equalsP == true){
-						   //grand
-						   
-						   if(grand != 0 && grand != (nbPixels + 1) ){
-							   System.out.println("grand = " + grand);
-							   System.out.println("PosGrrand = " + posGrand);
-							   
-								   if(posGrand == column){
-									   equalsG = true;
-									   System.out.println("EqualsG = " + line);
-								   }
-								   
-								   if(equalsG == false){
-									   if(column < width -1){
-										   if(color) {
-											   for(k = 0;k < 3;k++)
-												   newImageColor[line][column][k] = this.imageRgb[line][column + 1][k];
-										   }else
-											   System.out.println("columnsG = " + column);
-										   		System.out.println("lineG = " + line);
-											   newImage[line][column] = this.image[line][column + 1];
-									   }
-									   
-								   } else if(equalsP == true){
-									   
-									   if(column < width - 2){
-										   if(color) {
-											   for(k = 0;k < 3;k++)
-												   newImageColor[line][column][k] = this.imageRgb[line][column + 1][k];
-										   }else
-											   newImage[line][column] = this.image[line][column + 2];
-									   }
-								   }
-						   }
-								   
-						   
-						      
-						   
-					   } else {
-						   System.err.println("Error 0x087A4E652");
-					   } 
-					   System.out.println("");
-				   }
-		   }
-		   line--;
-	   }
-	   
-	   if(color)
-		   this.imageRgb = newImageColor;
-	   else
-		   this.image = newImage;
-	   
-	   this.width = width - 2;
    }
    
 /**
@@ -1077,10 +1065,15 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   g.writeFile("graph2.dot");
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
-	   /* verticalTwoPath */
-	   int[][] image = sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
-	   sc.verticaltwoPath();
-	   sc.writepgm(image, "test2vert.pgm");
+	   /* deleteverticalTwoPath */
+	   /*sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test.pgm");
+	   sc.deleteVerticaltwoPath();
+	   sc.writepgm(sc.image, "test2vert.pgm");*/
+	   
+	   /* deleteverticalTwoPath */
+	   sc.readpgm("/home/aurelien/workspace/Graou/src/graou/t.pgm");
+	   sc.deleteVerticaltwoPath();
+	   sc.writepgm(sc.image, "t2vert.pgm");
 	   
 
 	   /* read & write & deleteColumns ppm */

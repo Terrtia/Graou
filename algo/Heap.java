@@ -64,7 +64,7 @@ public class Heap
 		if (pos > size)
 		  {
 			 
-			 System.out.println("erreur");
+			 System.out.println("erreur pos > size");
 			 System.exit(1);
 		  }
 		
