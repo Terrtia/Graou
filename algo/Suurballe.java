@@ -13,8 +13,6 @@ public class Suurballe {
 	
 	public ArrayList<Integer> rechercheChemin(Graph g, int s, int t, int[][] intereset) {
 		
-		ArrayList<Integer> dernierSommets = g.getDerniersSommets();
-		
 		Dijkstra d = new Dijkstra();
 		//recherche du premier chemin
 		ArrayList<Integer> chemin1 = d.rechercheChemin(g, 0, g.vertices() - 1);
@@ -42,14 +40,9 @@ public class Suurballe {
 		
 		chemin2 = this.SupprimerSommetEnDouble(chemin1, chemin2);
 				
-		System.out.println("ss1 fina l =");
 		chemin1.add(-1);
 		for(Integer i : chemin2){
 			chemin1.add(i);
-		}
-		
-		for(Integer i : chemin1){
-			System.out.println(i);
 		}
 		
 		return chemin1;
