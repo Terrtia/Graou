@@ -47,6 +47,8 @@ public class VueHaut extends JPanel implements Observer {
 					String file = dialogue.getSelectedFile().getPath();
 					if(file.endsWith(".ppm"))
 						m.setColor(true);
+					else
+						m.setColor(false);
 					m.setFile(file);
 				}
 			}

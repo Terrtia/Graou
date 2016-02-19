@@ -3,27 +3,24 @@ package graou.vues;
 import graou.Modele;
 import graou.SeamCarving;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 
 public class VueActions extends JPanel implements Observer {
 
@@ -34,6 +31,7 @@ public class VueActions extends JPanel implements Observer {
 	private JButton addH;
 	private Thread t;
 	private JProgressBar bar;
+	private JCheckBox x2;
 	
 	public VueActions(Modele mod) {
 		// TODO Auto-generated constructor stub
@@ -45,6 +43,32 @@ public class VueActions extends JPanel implements Observer {
 		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
+		
+		x2 = new JCheckBox("x2");
+		x2.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(x2.isSelected()) {
+					delH.setEnabled(false);
+					addV.setEnabled(false);
+					addH.setEnabled(false);
+				}else {
+					if(m.getFile() != null) {
+						delH.setEnabled(true);
+						if(!m.isColor()) {
+							addV.setEnabled(true);
+							addH.setEnabled(true);
+						}
+					}
+					
+				}
+				
+			}
+			
+		});
+		buttons.add(x2);
 				
 		delV = new JButton("Suppression de colonnes");
 		delV.setEnabled(false);
@@ -67,7 +91,10 @@ public class VueActions extends JPanel implements Observer {
 								@Override
 								public void run()
 								{
-									m.deleteColumns((int)js.getValue());
+									if(x2.isSelected()) {
+										m.deleteColumnsX2((int)js.getValue());
+									}else
+										m.deleteColumns((int)js.getValue());
 								}
 							}.start();
 						}
@@ -258,9 +285,18 @@ public class VueActions extends JPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		delV.setEnabled(true);
-		delH.setEnabled(true);
-		addV.setEnabled(true);
-		addH.setEnabled(true);
+		if(x2.isSelected())
+			delH.setEnabled(false);
+		else
+			delH.setEnabled(true);
+		if(m.isColor() || x2.isSelected()) {
+			addV.setEnabled(false);
+			addH.setEnabled(false);
+		}else{
+			addV.setEnabled(true);
+			addH.setEnabled(true);
+		}
+		
 	}
 
 }

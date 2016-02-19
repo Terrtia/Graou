@@ -47,6 +47,10 @@ public class SeamCarving {
 		return image;
 	}
 	
+	public int [][][] getImageRgb() {
+		return imageRgb;
+	}
+	
 	/**
 	 * @param itr - tableau contenant les facteurs d'intérêt de l'image
 	 * @return un graphe représentant ce tableau
@@ -170,7 +174,6 @@ public class SeamCarving {
      			   if(pos == -1){
      				   pos = this.width - 1;
      			   }
-     			   System.out.println("new Edge("+j+", "+(nbSommets-1)+", itr["+(height-1)+"]["+pos+"])");
      			  g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
      		}
         
@@ -769,18 +772,22 @@ public void addLines() {
    
 	   	
    public void addNColumns(int nb) {
+	   progressValue = 0;
 	   if(color)
 		   convertRgbToGray(imageRgb);
 	   for(int i=0; i<nb; i++){
 		   this.addColumns();
+		   progressValue = (i+1)*100/nb;
 	   }
    }
    
    public void addNLines(int nb) {
+	   progressValue = 0;
 	   if(color)
 		   convertRgbToGray(imageRgb);
 	   for(int i=0; i<nb; i++){
 		   this.addLines();
+		   progressValue = (i+1)*100/nb;
 	   }
    }
    
@@ -1060,14 +1067,14 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* deleteverticalTwoPath */
-	   sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test2.pgm");
+	   /*sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test2.pgm");
 	   sc.deleteVerticaltwoPath();
-	   sc.writepgm(sc.image, "test2vert.pgm");
+	   sc.writepgm(sc.image, "test2vert.pgm");*/
 	   
 	   /* deleteverticalTwoPath */
 
 	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test.pgm");
-	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
+	   sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
 	   
 	   Graph g = sc.verticalToGraph2(sc.image);
 	   g.writeFile("graph1.dot");*/

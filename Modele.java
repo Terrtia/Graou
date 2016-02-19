@@ -55,14 +55,50 @@ public class Modele extends Observable {
 		return height;
 	}
 	
+	public boolean isColor() {
+		return color;
+	}
+	
 	public void deleteColumns(int nb) {
 		sc.deleteNColumns(nb);
-		save("res.pgm");
+		if(color) 
+			save("res.ppm");
+		else
+			save("res.pgm");
 		String repertoireCourant;
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
-			fileRes = repertoireCourant + "/res.pgm";
-			sc.readpgm(file);
+			if(color) {
+				fileRes = repertoireCourant + "/res.ppm";
+				sc.readppm(file);
+			}else {
+				fileRes = repertoireCourant + "/res.pgm";
+				sc.readpgm(file);
+			}
+			setChanged();
+			notifyObservers();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteColumnsX2(int nb) {
+		sc.delete2NColumns(nb/2);
+		if(color) 
+			save("res.ppm");
+		else
+			save("res.pgm");
+		String repertoireCourant;
+		try {
+			repertoireCourant = new File(".").getCanonicalFile().getPath();
+			if(color) {
+				fileRes = repertoireCourant + "/res.ppm";
+				sc.readppm(file);
+			}else {
+				fileRes = repertoireCourant + "/res.pgm";
+				sc.readpgm(file);
+			}
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
@@ -73,12 +109,20 @@ public class Modele extends Observable {
 	
 	public void deleteLines(int nb) {
 		sc.deleteNLines(nb);
-		save("res.pgm");
+		if(color) 
+			save("res.ppm");
+		else
+			save("res.pgm");
 		String repertoireCourant;
 		try {
 			repertoireCourant = new File(".").getCanonicalFile().getPath();
-			fileRes = repertoireCourant + "/res.pgm";
-			sc.readpgm(file);
+			if(color) {
+				fileRes = repertoireCourant + "/res.ppm";
+				sc.readppm(file);
+			}else {
+				fileRes = repertoireCourant + "/res.pgm";
+				sc.readpgm(file);
+			}
 			setChanged();
 			notifyObservers();
 		} catch (IOException e) {
@@ -120,7 +164,10 @@ public class Modele extends Observable {
 	}
 	
 	public void save(String name) {
-		sc.writepgm(sc.getImage(), name);
+		if(color)
+			sc.writeppm(sc.getImageRgb(), name);
+		else
+			sc.writepgm(sc.getImage(), name);
 	}
 	
 }
