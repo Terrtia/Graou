@@ -17,7 +17,9 @@ public class Suurballe {
 		
 		Dijkstra d = new Dijkstra();
 		//recherche du premier chemin
+		System.out.println("recherche chemins");
 		ArrayList<Integer> chemin1 = d.rechercheChemin(g, 0, g.vertices() - 1);
+		System.out.println("chemin 1 trouvé");
 		
 		g.calcMinCost(s);
 		g.diffCost(s);
@@ -33,6 +35,7 @@ public class Suurballe {
 		
 		//recherche du second chemin
 		ArrayList<Integer> chemin2 = d.rechercheChemin(g1, 0, g1.vertices() - 1);
+		System.out.println("chemin 2 trouvé");
 		
 		
 		Collections.reverse(chemin2);
