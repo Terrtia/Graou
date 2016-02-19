@@ -354,12 +354,12 @@ public class SeamCarving {
         }
         
      // derniere ligne
-     		for (j = (nbSommets - 1) - width; j < nbSommets ; j++){
+     		for (j = (nbSommets - 1) - width; j < nbSommets-1 ; j++){
      			int pos = j%this.width - 1;
      			   if(pos == -1){
      				   pos = this.width - 1;
      			   }
-     			   //System.out.println("new Edge("+j+", "+nbSommets+", itr["+(height-1)+"]["+pos+"]");
+     			   System.out.println("new Edge("+j+", "+(nbSommets-1)+", itr["+(height-1)+"]["+pos+"])");
      			  g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
      		}
         
@@ -1250,7 +1250,7 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   
 	   /* deleteverticalTwoPath */
 	   sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test2.pgm");
-	   sc.deleteVerticaltwoPath();
+	   sc.delete2NColumns(1);
 	   sc.writepgm(sc.image, "test2vert.pgm");
 	   
 	   /* deleteverticalTwoPath */
