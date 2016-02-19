@@ -1067,14 +1067,16 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   sc.writepgm(sc.image, "test2vert.pgm");
 	   
 	   /* deleteverticalTwoPath */
+
+	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test.pgm");
 	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
 	   
 	   Graph g = sc.verticalToGraph2(sc.image);
 	   g.writeFile("graph1.dot");*/
 	   
-	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
+	   sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
 	   sc.deleteVerticaltwoPath();
-	   sc.writepgm(sc.image, "t2vert.pgm");*/
+	   sc.writepgm(sc.image, "t2vert.pgm");
 	   
 
 	   /* read & write & deleteColumns ppm */
