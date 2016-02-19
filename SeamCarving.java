@@ -128,9 +128,13 @@ public class SeamCarving {
 	 * @param itr - facteurs d'intérêts de l'image
 	 * @return - graphe vertical des facteurs d'intérêts
 	 */
+	
+	//public Graph verticalToGraph2(int[][] itr) {
+		
 	/*public Graph verticalToGraph2(int[][] itr) {
 		int nbSommets = width * height + 2 + width * (height - 1);
 		int i, j;
+		int nbS0 = height - 2;
 		Graph g = new Graph(nbSommets);
 		
 		// sommet tout en haut
@@ -152,8 +156,77 @@ public class SeamCarving {
 			  g.addEdge(new Edge(j+1, width+j+1, itr[0][j]));
 		  }
 		
+		System.out.println("nbS0 = " + nbS0);
+		
+		//lignes = 0
+		
+		for (i = 1; i < height; i++)
+		{
+			System.out.println("i = " + i);
+			System.out.println("h = " + (height-1));
+			if(i%2 == 1){
+				
+				for (j = 0; j < width ; j++) {
+					// arête de poids 0
+					//System.out.println("i = " + i);
+					//System.out.println("Edge(width*i+j+1, width*(i+1)+j+1, 0)");
+					//System.out.println("Edge(" + (width*i+j+1) + ", " + (width*(i+1)+j+1) + ", 0)");
+					g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, 0));
+				}
+			}
+		}
+		
+		
+		
+		
+		/*
 		// lignes intérieures
-
+		for (i = 1; i < height; i++)
+		{
+			System.out.println("i = " + i);
+			System.out.println("h = " + (height-1));
+			if(i%2 == 1){
+				
+				for (j = 0; j < width ; j++) {
+					// arête de poids 0
+					//System.out.println("i = " + i);
+					//System.out.println("Edge(width*i+j+1, width*(i+1)+j+1, 0)");
+					//System.out.println("Edge(" + (width*i+j+1) + ", " + (width*(i+1)+j+1) + ", 0)");
+					g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, 0));
+				}
+			}
+			
+			  for (j = 0; j < width ; j++)
+			  {
+				  // arête vers la gauche
+				  if(j > 0) {
+					  g.addEdge(new Edge(width*(i+1)+j+1+t, width*(i+2)+j+t, itr[i][j]));
+				  }
+				  // arête vers la droite
+				  if(j < width-1) {
+					  g.addEdge(new Edge(width*(i+1)+j+1+t, width*(i+2)+j+2+t, itr[i][j]));
+				  }
+				  // arête centrale
+				  g.addEdge(new Edge(width*(i+1)+j+1+t, width*(i+2)+j+1+t, itr[i][j]));
+				  System.out.println("Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[i][j])");
+				  System.out.println("Edge(" +(width*(i+1)+j+1)+", "+(width*(i+2)+j+1)+", " + itr[i][j]);
+			}
+			  t++;
+		}
+		*/
+		
+		// sommet tout en bas
+		/*for (j = (nbSommets - 1) - width; j < nbSommets ; j++){
+			int pos = j%this.width - 1;
+			   if(pos == -1){
+				   pos = this.width - 1;
+			   }
+			   //System.out.println("new Edge("+j+", "+nbSommets+", itr["+(height-1)+"]["+pos+"]");
+			  g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
+		}*/
+		
+		//lignes interieurs non nulle
+/*
 		for (i = 1; i < height; i+=2) {
 			for (j = 0; j < width ; j++) {
 				// arête de poids 0
@@ -236,6 +309,7 @@ public class SeamCarving {
 		// sommet tout en bas
 		for (j = 0; j < width ; j++)		  
 			  g.addEdge(new Edge(width*(y1)+j+1+width*(height-2), (y2)*width+1+width*(height-1), itr[iCourant][j]));
+>>>>>>> 04a2cf742e7c912f13aebb607029d83161ea7a3b
 		
 		
 		return g;
@@ -279,10 +353,15 @@ public class SeamCarving {
             }
         }
         
-        // dernière ligne
-        for (j = 0; j < width; j++) {
-            g.addEdge(new Edge(nbSommets-j-2, g.vertices() - 1, itr[iCourant][j]));
-        }
+     // derniere ligne
+     		for (j = (nbSommets - 1) - width; j < nbSommets ; j++){
+     			int pos = j%this.width - 1;
+     			   if(pos == -1){
+     				   pos = this.width - 1;
+     			   }
+     			   //System.out.println("new Edge("+j+", "+nbSommets+", itr["+(height-1)+"]["+pos+"]");
+     			  g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
+     		}
         
         return g;
 	}
@@ -1175,10 +1254,10 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   sc.writepgm(sc.image, "test2vert.pgm");*/
 	   
 	   /* deleteverticalTwoPath */
-	   sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
+	   //sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
 	   
-	   Graph g = sc.verticalToGraph2(sc.image);
-	   g.writeFile("graph1.dot");
+	   //Graph g = sc.verticalToGraph2(sc.image);
+	   //g.writeFile("graph1.dot");
 	   
 	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
 	   sc.deleteVerticaltwoPath();
