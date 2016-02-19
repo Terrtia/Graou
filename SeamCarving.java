@@ -165,13 +165,14 @@ public class SeamCarving {
         }
         
      // derniere ligne
-     	for (j = (nbSommets - 1) - width; j < nbSommets ; j++){
-     		int pos = j%this.width - 1;
-     			 if(pos == -1){
-     				 pos = this.width - 1;
-     			 }
-     			g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
-     	}
+     		for (j = (nbSommets - 1) - width; j < nbSommets-1 ; j++){
+     			int pos = j%this.width - 1;
+     			   if(pos == -1){
+     				   pos = this.width - 1;
+     			   }
+     			   System.out.println("new Edge("+j+", "+(nbSommets-1)+", itr["+(height-1)+"]["+pos+"])");
+     			  g.addEdge(new Edge(j, nbSommets-1, itr[height-1][pos]));
+     		}
         
         return g;
 	}
@@ -1059,12 +1060,14 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   //sc.writepgm(sc.image, "veradd.pgm");*/
 	   
 	   /* deleteverticalTwoPath */
-	   /*sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test2.pgm");
+	   sc.readpgm("/home/aurelien/workspace/Graou/src/graou/test2.pgm");
 	   sc.deleteVerticaltwoPath();
-	   sc.writepgm(sc.image, "test2vert.pgm");*/
+	   sc.writepgm(sc.image, "test2vert.pgm");
 	   
 	   /* deleteverticalTwoPath */
+
 	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test.pgm");
+	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
 	   
 	   Graph g = sc.verticalToGraph2(sc.image);
 	   g.writeFile("graph1.dot");*/
