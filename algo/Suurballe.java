@@ -13,30 +13,27 @@ public class Suurballe {
 	
 	public ArrayList<Integer> rechercheChemin(Graph g, int s, int t, int[][] intereset) {
 		
-		g.writeFile("dep.dot");
+		//g.writeFile("dep.dot");
 		
 		Dijkstra d = new Dijkstra();
 		//recherche du premier chemin
-		System.out.println("recherche chemins");
+	
 		ArrayList<Integer> chemin1 = d.rechercheChemin(g, 0, g.vertices() - 1);
-		System.out.println("chemin 1 trouvé");
 		
 		g.calcMinCost(s);
 		g.diffCost(s);
 		
-		g.writeFile("newCost.dot");
+		//g.writeFile("newCost.dot");
 		
 		Graph g1 = new Graph(g.vertices());
 		
 		g1 = g;
 		   
 		g1.swapEdge(chemin1, s);
-		g1.writeFile("swap.dot");
+		//g1.writeFile("swap.dot");
 		
 		//recherche du second chemin
-		ArrayList<Integer> chemin2 = d.rechercheChemin(g1, 0, g1.vertices() - 1);
-		System.out.println("chemin 2 trouvé");
-		
+		ArrayList<Integer> chemin2 = d.rechercheChemin(g1, 0, g1.vertices() - 1);	
 		
 		Collections.reverse(chemin2);
 		

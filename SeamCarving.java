@@ -864,9 +864,11 @@ public void tabDeleteColum(ArrayList<Integer> chemin1, ArrayList<Integer> chemin
 		   equalsP = false;
 		   equalsG = false;
 		   
-		   for( column=0; column<width-2; column++){
+		   if(line < height){
+		   
+			   for( column=0; column<width-2; column++){
 			 
-			   if(petit != 0 && petit != (nbPixels + 1) ){
+				   if(petit != 0 && petit != (nbPixels + 1) ){
 					   if(posPetit == column){
 						   equalsP = true;
 					   }
@@ -912,6 +914,7 @@ public void tabDeleteColum(ArrayList<Integer> chemin1, ArrayList<Integer> chemin
 						   System.err.println("Error 0x087A4E652");
 					   } 
 				   }
+			   }
 		   }
 		   line++;
 	   }
@@ -926,11 +929,13 @@ public void tabDeleteColum(ArrayList<Integer> chemin1, ArrayList<Integer> chemin
    }
    
 	public void delete2NColumns(int nb){
+		progressValue = 0;
 		for(int i=0; i<nb; i++){
 			if(color){
 				convertRgbToGray(imageRgb);
 			}
 			this.deleteVerticaltwoPath();
+			progressValue = (i+1)*100/nb;
 	   }
 	}
    
@@ -1079,9 +1084,9 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   Graph g = sc.verticalToGraph2(sc.image);
 	   g.writeFile("graph1.dot");*/
 	   
-	   sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
-	   sc.deleteVerticaltwoPath();
-	   sc.writepgm(sc.image, "t2vert.pgm");
+	   /*sc.readpgm("/home/blplplp/workspace/Graou/src/graou/t.pgm");
+	   sc.delete2NColumns(10);
+	   sc.writepgm(sc.image, "t2vert.pgm");*/
 	   
 
 	   /* read & write & deleteColumns ppm */
