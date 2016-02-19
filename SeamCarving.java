@@ -128,7 +128,7 @@ public class SeamCarving {
 	 * @param itr - facteurs d'intérêts de l'image
 	 * @return - graphe vertical des facteurs d'intérêts
 	 */
-	public Graph verticalToGraph2(int[][] itr) {
+	/*public Graph verticalToGraph2(int[][] itr) {
 		int nbSommets = width * height + 2 + width * (height - 1);
 		int i, j;
 		Graph g = new Graph(nbSommets);
@@ -153,37 +153,139 @@ public class SeamCarving {
 		  }
 		
 		// lignes intérieures
-		for (i = 1; i < height-1; i++)
-		{
+
+		for (i = 1; i < height; i+=2) {
 			for (j = 0; j < width ; j++) {
 				// arête de poids 0
 				g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, 0));
-				
 			}
-			  for (j = 0; j < width ; j++)
-			  {
+		}
+
+		if(height > 3){// && height%2 != 0){
+			for (j = 0; j < width ; j++) {
+				// arête de poids 0
+				g.addEdge(new Edge(width*i+j+1, width*(i+1)+j+1, 0));
+			}
+		}
+		
+			
+		int iCourant = 1;
+		int h = height - 1;
+		if(height > 3 && height%2==0)
+			h = height;
+		
+		for (i = 1; i < h-1; i+=2)
+		{
+			for (j = 0; j < width ; j++) {
+				
+				
+				
 				  // arête vers la gauche
 				  if(j > 0) {
-					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j, itr[i][j]));
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j, itr[iCourant][j]));
 				  }
 				  // arête vers la droite
 				  if(j < width-1) {
-					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+2, itr[i][j]));
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+2, itr[iCourant][j]));
 				  }
 				  // arête centrale
-				  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[i][j]));
+				  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[iCourant][j]));
 				  
 			  }
+			iCourant++;
 		}
-		
+		int y1 = height - 1;
+		int y2 = height;
+		// dernière ligne
+		if(height > 3 && height%2 == 0) {
+				for (j = 0; j < width ; j++)
+				  {
+					// arête vers la gauche
+					  if(j > 0) {
+						  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j, itr[iCourant][j]));
+					  }
+					  // arête vers la droite
+					  if(j < width-1) {
+						  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+2, itr[iCourant][j]));
+					  }
+					  // arête centrale
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[iCourant][j]));
+				  }
+				iCourant++;
+		}else if(height > 3 && height%2 != 0){
+			System.out.println("height > 3 && height%2 != 0");
+			for (j = 0; j < width ; j++)
+			  {
+				// arête vers la gauche
+				  if(j > 0) {
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j, itr[iCourant][j]));
+				  }
+				  // arête vers la droite
+				  if(j < width-1) {
+					  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+2, itr[iCourant][j]));
+				  }
+				  // arête centrale
+				  g.addEdge(new Edge(width*(i+1)+j+1, width*(i+2)+j+1, itr[iCourant][j]));
+			  }
+			iCourant++;
+			i--;
+		}else {
+			i-=2;
+		}
+			
 		// sommet tout en bas
 		for (j = 0; j < width ; j++)		  
-			  g.addEdge(new Edge(width*(height-1)+j+1+width*(height-2), height*width+1+width*(height-1), itr[i][j]));
+			  g.addEdge(new Edge(width*(y1)+j+1+width*(height-2), (y2)*width+1+width*(height-1), itr[iCourant][j]));
 		
 		
 		return g;
-	}
+	}*/
 	
+	public Graph verticalToGraph2(int[][] itr) {
+		int h = (height-2) * 2 + 2;
+		int nbSommets = h * width + 2;
+		int i, j;
+		Graph g = new Graph(nbSommets);
+		
+		// sommet tout en haut
+		for (j = 0; j < width ; j++)					
+			g.addEdge(new Edge(0, j+1, 0));
+				
+		int numero = 1;
+
+        int iCourant = 0;
+        // lignes centrales
+        for (i = 0; i < h; i++) {
+            if (i != h - 1) {
+                if (i%2 == 0) {
+                    for (j = 0; j < width; j++) {
+                    	// arête vers la gauche
+                        if (j > 0) {
+                            g.addEdge(new Edge(i*width+j+1, (i+1)*width+j, itr[iCourant][j]));
+                        }
+                        // arête vers la droite
+                        if (j < width-1) {
+                            g.addEdge(new Edge(i*width+j+1, (i+1)*width+j+2, itr[iCourant][j]));
+                        }
+                        // arête centrale
+                        g.addEdge(new Edge(i*width+j+1, (i+1)*width+j+1, itr[iCourant][j]));
+                    }
+                    iCourant++;
+                } else {
+                    for (j = 0; j < width; j++) {
+                        g.addEdge(new Edge(i*width+j+1, (i+1)*width+j+1, 0));
+                    }
+                }
+            }
+        }
+        
+        // dernière ligne
+        for (j = 0; j < width; j++) {
+            g.addEdge(new Edge(nbSommets-j-2, g.vertices() - 1, itr[iCourant][j]));
+        }
+        
+        return g;
+	}
 	
 	/**
 	 * Lit un fichier pgm
@@ -1073,7 +1175,11 @@ public void tabDeleteColum(ArrayList<Integer> chemin) {
 	   sc.writepgm(sc.image, "test2vert.pgm");*/
 	   
 	   /* deleteverticalTwoPath */
-	   sc.readpgm("/home/aurelien/workspace/Graou/src/graou/t.pgm");
+	   sc.readpgm("/home/blplplp/workspace/Graou/src/graou/test0.pgm");
+	   
+	   Graph g = sc.verticalToGraph2(sc.image);
+	   g.writeFile("graph1.dot");
+	   
 	   sc.deleteVerticaltwoPath();
 	   sc.writepgm(sc.image, "t2vert.pgm");
 	   
